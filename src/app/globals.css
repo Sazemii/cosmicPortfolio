@@ -80,3 +80,71 @@ body {
 .mainBody {
   padding-top: 5rem;
 }
+
+.star-image {
+  width: 70px;
+  height: 70px;
+}
+
+.top-star {
+  position: absolute;
+  top: -4rem;
+  right: 0;
+}
+
+.bottom-star {
+  position: absolute;
+  bottom: -4rem;
+  left: -4rem;
+}
+
+@media (max-width: 768px) {
+  .star-image {
+    width: 60px;
+    height: 60px;
+  }
+
+  .top-star {
+    top: -2rem;
+    right: -0.75rem;
+  }
+
+  .bottom-star {
+    bottom: -2.5rem;
+    left: -3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .star-image {
+    width: 40px;
+    height: 40px;
+  }
+
+  .top-star {
+    top: -2rem;
+    right: -0.75rem;
+  }
+
+  .bottom-star {
+    bottom: -2.5rem;
+    left: -2rem;
+  }
+}
+
+@media (max-width: 446px) {
+  .star-image {
+    width: 30px;
+    height: 30px;
+  }
+
+  .top-star {
+    top: -2.5rem;
+    right: 0rem;
+  }
+
+  .bottom-star {
+    bottom: -2.5rem;
+    left: 1rem;
+  }
+}
