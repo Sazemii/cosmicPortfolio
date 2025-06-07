@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
 
 @theme inline {
   --color-background: var(--background);
@@ -43,4 +44,39 @@ body {
   cursor: pointer;
   position: relative;
   transition: color 0.3s ease-in;
+}
+
+@media (max-width: 768px) {
+  .nav-item {
+    padding: 0.5rem 1.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .nav-item {
+    padding: 0.4rem 1rem;
+  }
+}
+
+.introductionStatement {
+  font-family: "Nunito", sans-serif;
+  font-weight: 600;
+
+  font-size: clamp(5rem, 6vw + 2rem, 6.25rem);
+}
+
+@media (max-width: 1024px) {
+  .introductionStatement {
+    font-size: clamp(2rem, 8vw, 5.5rem);
+  }
+}
+
+@media (max-width: 640px) {
+  .introductionStatement {
+    font-size: clamp(2.5rem, 8vw, 4rem);
+  }
+}
+
+.mainBody {
+  padding-top: 5rem;
 }
