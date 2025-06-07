@@ -10,6 +10,13 @@ export default function Home() {
   const bottomStarControls = useAnimationControls();
   const [isTopHovering, setIsTopHovering] = useState(false);
   const [isBottomHovering, setIsBottomHovering] = useState(false);
+  const [currentText, setCurrentText] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  const [isErasing, setIsErasing] = useState(false);
+  const [textIndex, setTextIndex] = useState(0);
+  const [cycleComplete, setCycleComplete] = useState(false);
+
+  const texts = ["UI designer", "frontend developer"];
 
   const navRefs = {
     home: useRef(null),
@@ -44,6 +51,49 @@ export default function Home() {
   };
 
   useEffect(() => {
+    if (cycleComplete) return;
+
+    const currentFullText = texts[textIndex];
+
+    if (isTyping) {
+      if (currentText.length < currentFullText.length) {
+        const timer = setTimeout(() => {
+          setCurrentText(currentFullText.slice(0, currentText.length + 1));
+        }, 80);
+        return () => clearTimeout(timer);
+      } else {
+        if (textIndex === texts.length - 1) {
+          setCycleComplete(true);
+          return;
+        }
+        const timer = setTimeout(() => {
+          setIsTyping(false);
+          setIsErasing(true);
+        }, 2000);
+        return () => clearTimeout(timer);
+      }
+    } else if (isErasing) {
+      if (currentText.length > 0) {
+        const timer = setTimeout(() => {
+          setCurrentText(currentText.slice(0, -1));
+        }, 60);
+        return () => clearTimeout(timer);
+      } else {
+        setTextIndex(textIndex + 1);
+        setIsErasing(false);
+        setIsTyping(true);
+      }
+    }
+  }, [currentText, isTyping, isErasing, textIndex, cycleComplete]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsTyping(true);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
     updateIndicatorPosition();
     window.addEventListener("resize", updateIndicatorPosition);
     return () => {
@@ -52,7 +102,6 @@ export default function Home() {
   }, [activeTab]);
 
   const handleStarAnimation = (controls, animRef) => {
-    // If not animating, start a new cycle
     if (!animRef.current.isAnimating) {
       animRef.current.isAnimating = true;
 
@@ -148,7 +197,26 @@ export default function Home() {
 
           <div className="introductionStatement text-center">
             Hi. I'm Carl. A <br />
-            frontend developer.
+            <span
+              style={{
+                display: "inline-block",
+                minWidth: "200px",
+                textAlign: "left",
+              }}
+            >
+              {currentText}
+              <motion.span
+                animate={{ opacity: [1, 0] }}
+                transition={{
+                  duration: 0.8,
+                  repeat: Infinity,
+                  repeatType: "reverse",
+                }}
+                style={{ display: "inline-block" }}
+              >
+                |
+              </motion.span>
+            </span>
           </div>
 
           <motion.div
