@@ -195,28 +195,19 @@ export default function Home() {
             />
           </motion.div>
 
-          <div className="introductionStatement text-center">
+                    <div className="introductionStatement text-center">
             Hi. I'm Carl. A <br />
-            <span
-              style={{
-                display: "inline-block",
-                minWidth: "200px",
-                textAlign: "left",
+            {currentText}
+            <motion.span
+              animate={{ opacity: [1, 0] }}
+              transition={{
+                duration: 0.8,
+                repeat: Infinity,
+                repeatType: "reverse",
               }}
             >
-              {currentText}
-              <motion.span
-                animate={{ opacity: [1, 0] }}
-                transition={{
-                  duration: 0.8,
-                  repeat: Infinity,
-                  repeatType: "reverse",
-                }}
-                style={{ display: "inline-block" }}
-              >
-                |
-              </motion.span>
-            </span>
+              |
+            </motion.span>
           </div>
 
           <motion.div
