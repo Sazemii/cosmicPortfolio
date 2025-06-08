@@ -177,7 +177,7 @@ export default function Home() {
           Contact
         </div>
       </div>
-      <div className="mainBody flex justify-center items-center">
+      <div className="mainBody flex flex-col gap-[2rem] justify-center items-center">
         <div className="introduction flex justify-center relative">
           <motion.div
             className="top-star"
@@ -195,7 +195,7 @@ export default function Home() {
             />
           </motion.div>
 
-                    <div className="introductionStatement text-center">
+          <div className="introductionStatement text-center">
             Hi. I'm Carl. A <br />
             {currentText}
             <motion.span
@@ -226,6 +226,10 @@ export default function Home() {
             />
           </motion.div>
         </div>
+        <span className="introDescription text-center">
+          I'm passionate in creating modern web designs that improve user
+          experience through aesthetics and motion
+        </span>
       </div>
     </main>
   );
