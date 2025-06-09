@@ -218,3 +218,65 @@ body {
     font-size: 1.4rem;
   }
 }
+
+.aboutRow {
+  font-size: clamp(0.75rem, 1.2vw, 0.9rem);
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.more-btn,
+.contact-btn {
+  padding: clamp(0.3rem, 0.8vw, 0.4rem) clamp(0.5rem, 1vw, 0.7rem);
+  border-radius: 15px;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  @media (max-width: 480px) {
+    gap: 0rem;
+  }
+}
+
+.more-btn {
+  background-color: #2d69ff;
+}
+
+.contact-btn {
+  background-color: #424242;
+}
+
+.more-btn:hover {
+  background-color: #1e54d5;
+  transform: translateY(-2px);
+}
+
+.contact-btn:hover {
+  background-color: #333333;
+  transform: translateY(-2px);
+}
+
+.searchIcon,
+.arrowRight {
+  margin-left: 0.25rem;
+}
+
+@media (max-width: 480px) {
+  .aboutRow {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+    white-space: nowrap;
+  }
+
+  .more-btn,
+  .contact-btn {
+    justify-content: center;
+  }
+}

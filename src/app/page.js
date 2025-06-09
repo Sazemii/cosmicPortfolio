@@ -237,6 +237,28 @@ export default function Home() {
             coding robots 3 years ago. Now focusing on using ReactJS and
             libraries.
           </span>
+          <div className="aboutRow flex">
+            <span className="more-btn flex">
+              More about me{" "}
+              <Image
+                src="/searchIcon.svg"
+                alt="searchIcon"
+                width={20}
+                height={20}
+                className="searchIcon"
+              />
+            </span>
+            <span className="contact-btn flex">
+              Contact me
+              <Image
+                src="/arrowRight.svg"
+                alt="arrowRight"
+                width={20}
+                height={20}
+                className="arrowRight"
+              />
+            </span>
+          </div>
         </div>
       </div>
     </main>
