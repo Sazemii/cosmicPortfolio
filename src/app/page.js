@@ -230,6 +230,14 @@ export default function Home() {
           I'm passionate in creating modern web designs that improve user
           experience through aesthetics and motion
         </span>
+        <div className="aboutBlock flex flex-col justify-center items-center">
+          <span className="aboutTitle">About me</span>
+          <span className="aboutDescription">
+            A 19 year old bloke whose hobby is to create websites. Started with
+            coding robots 3 years ago. Now focusing on using ReactJS and
+            libraries.
+          </span>
+        </div>
       </div>
     </main>
   );
