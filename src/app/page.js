@@ -178,7 +178,8 @@ export default function Home() {
         </div>
       </div>
       <div className="mainBody flex flex-col gap-[2rem] justify-center items-center">
-        <div className="introduction flex justify-center relative">
+        <div className="introduction flex flex-col gap-[2rem] justify-center items-center">
+        <div className="flex justify-center relative">
           <motion.div
             className="top-star"
             animate={topStarControls}
@@ -225,12 +226,14 @@ export default function Home() {
               className="star-image"
             />
           </motion.div>
+       
         </div>
         <span className="introDescription text-center">
           I'm passionate in creating modern web designs that improve user
           experience through aesthetics and motion
         </span>
-        <div className="aboutBlock flex flex-col justify-center items-center">
+        </div>
+                <div className="aboutBlock flex flex-col justify-center items-center">
           <span className="aboutTitle">About me</span>
           <span className="aboutDescription">
             A 19 year old bloke whose hobby is to create websites. Started with

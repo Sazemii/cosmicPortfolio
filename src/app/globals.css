@@ -90,6 +90,10 @@ body {
   @media (max-width: 600px) {
     gap: 3rem;
   }
+
+  @media (min-width: 1024px) {
+   padding-top: 2rem;
+  }
 }
 
 .star-image {
@@ -187,6 +191,14 @@ body {
     display: none;
   }
 }
+
+.introduction {
+  @media (min-width: 1024px) {
+    min-height: 78vh;
+  }
+}
+
+
 
 .aboutBlock {
   padding-top: 1rem;
