@@ -2,6 +2,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, useAnimationControls } from "framer-motion";
 import Image from "next/image";
+import StarField from "../components/StarField";
 
 
 export default function Home() {
@@ -142,6 +143,7 @@ export default function Home() {
 
   return (
     <main className="">
+      <StarField />
  
       <div className="gradient-circles-container">
         <motion.div 
