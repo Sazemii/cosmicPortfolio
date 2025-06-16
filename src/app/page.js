@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import { motion, useAnimationControls } from "framer-motion";
 import Image from "next/image";
 import StarField from "../components/StarField";
-
+import { createIcons, icons } from 'lucide-react';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("home");
@@ -339,6 +339,11 @@ export default function Home() {
                 className="arrowRight"
               />
             </span>
+          </div>
+        </div>
+        <div className="projects">
+          <div className="project-title">
+            Projects
           </div>
         </div>
       </div>

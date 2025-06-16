@@ -58,6 +58,13 @@ body {
   }
 }
 
+@media (max-width: 500px) {
+  .nav-item {
+    padding: 0.3rem 0.8rem;
+    font-size: 0.9rem;
+  }
+}
+
 .introductionStatement {
   font-family: "Nunito", sans-serif;
   font-weight: 600;
