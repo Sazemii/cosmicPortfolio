@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import { motion, useAnimationControls } from "framer-motion";
 import Image from "next/image";
 import StarField from "../components/StarField";
-import { createIcons, icons } from 'lucide-react';
+import { createIcons, icons } from "lucide-react";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("home");
@@ -144,77 +144,95 @@ export default function Home() {
   return (
     <main className="">
       <StarField />
- 
+
       <div className="gradient-circles-container">
-        <motion.div 
+        <motion.div
           className="gradient-circle violet-circle"
           initial={{ opacity: 0, scale: 0.8, x: 0, y: 0 }}
-          animate={{ 
+          animate={{
             opacity: [0.3, 0.6, 0.4, 0.7, 0.3],
             scale: [1, 1.3, 0.9, 1.2, 1],
             x: [0, 40, -20, 30, 0],
             y: [0, 25, 40, -15, 0],
-            borderRadius: ["74% 26% 47% 53% / 68% 46% 54% 32%", "26% 74% 33% 67% / 54% 68% 32% 46%", "67% 33% 74% 26% / 32% 54% 46% 68%", "33% 67% 26% 74% / 46% 32% 68% 54%", "74% 26% 47% 53% / 68% 46% 54% 32%"],
-            rotate: [0, 45, -30, 60, 0]
+            borderRadius: [
+              "74% 26% 47% 53% / 68% 46% 54% 32%",
+              "26% 74% 33% 67% / 54% 68% 32% 46%",
+              "67% 33% 74% 26% / 32% 54% 46% 68%",
+              "33% 67% 26% 74% / 46% 32% 68% 54%",
+              "74% 26% 47% 53% / 68% 46% 54% 32%",
+            ],
+            rotate: [0, 45, -30, 60, 0],
           }}
-          transition={{ 
+          transition={{
             duration: 8,
             ease: "easeInOut",
             repeat: Infinity,
-            delay: 0.2
+            delay: 0.2,
           }}
           whileHover={{
             scale: 1.4,
             opacity: 0.8,
-            transition: { duration: 0.4 }
+            transition: { duration: 0.4 },
           }}
         />
-        
-        <motion.div 
+
+        <motion.div
           className="gradient-circle blue-circle"
           initial={{ opacity: 0, scale: 0.8, x: 0, y: 0 }}
-          animate={{ 
+          animate={{
             opacity: [0.4, 0.3, 0.7, 0.5, 0.4],
             scale: [1, 0.8, 1.4, 1.1, 1],
             x: [0, -35, 25, -10, 0],
             y: [0, 35, -20, 30, 0],
-            borderRadius: ["63% 37% 54% 46% / 55% 48% 52% 45%", "37% 63% 46% 54% / 48% 55% 45% 52%", "54% 46% 63% 37% / 52% 45% 55% 48%", "46% 54% 37% 63% / 45% 52% 48% 55%", "63% 37% 54% 46% / 55% 48% 52% 45%"],
-            rotate: [0, -60, 90, -45, 0]
+            borderRadius: [
+              "63% 37% 54% 46% / 55% 48% 52% 45%",
+              "37% 63% 46% 54% / 48% 55% 45% 52%",
+              "54% 46% 63% 37% / 52% 45% 55% 48%",
+              "46% 54% 37% 63% / 45% 52% 48% 55%",
+              "63% 37% 54% 46% / 55% 48% 52% 45%",
+            ],
+            rotate: [0, -60, 90, -45, 0],
           }}
-          transition={{ 
+          transition={{
             duration: 10,
             ease: "easeInOut",
             repeat: Infinity,
-            delay: 0.8
+            delay: 0.8,
           }}
           whileHover={{
             scale: 1.5,
             opacity: 0.9,
-            transition: { duration: 0.4 }
+            transition: { duration: 0.4 },
           }}
         />
-        
-        <motion.div 
+
+        <motion.div
           className="gradient-circle pink-circle"
           initial={{ opacity: 0, scale: 0.8, x: 0, y: 0 }}
-          animate={{ 
+          animate={{
             opacity: [0.5, 0.7, 0.3, 0.6, 0.5],
             scale: [1, 1.2, 1.5, 0.9, 1],
             x: [0, 20, -30, 15, 0],
             y: [0, -25, 20, -35, 0],
-            borderRadius: ["81% 19% 33% 67% / 72% 44% 56% 28%", "19% 81% 67% 33% / 44% 72% 28% 56%", "33% 67% 81% 19% / 56% 28% 72% 44%", "67% 33% 19% 81% / 28% 56% 44% 72%", "81% 19% 33% 67% / 72% 44% 56% 28%"],
-            rotate: [0, 120, -90, 75, 0]
+            borderRadius: [
+              "81% 19% 33% 67% / 72% 44% 56% 28%",
+              "19% 81% 67% 33% / 44% 72% 28% 56%",
+              "33% 67% 81% 19% / 56% 28% 72% 44%",
+              "67% 33% 19% 81% / 28% 56% 44% 72%",
+              "81% 19% 33% 67% / 72% 44% 56% 28%",
+            ],
+            rotate: [0, 120, -90, 75, 0],
           }}
-          transition={{ 
+          transition={{
             duration: 7,
             ease: "easeInOut",
             repeat: Infinity,
-            delay: 1.5
+            delay: 1.5,
           }}
           whileHover={{
             scale: 1.6,
             opacity: 0.8,
-            transition: { duration: 0.4 }
+            transition: { duration: 0.4 },
           }}
         />
       </div>
@@ -257,61 +275,60 @@ export default function Home() {
       </div>
       <div className="mainBody flex flex-col gap-[2rem] justify-center items-center">
         <div className="introduction flex flex-col gap-[2rem] justify-center items-center">
-        <div className="flex justify-center relative">
-          <motion.div
-            className="top-star"
-            animate={topStarControls}
-            initial={{ scale: 1, rotate: 0 }}
-            onHoverStart={() => setIsTopHovering(true)}
-            onHoverEnd={() => setIsTopHovering(false)}
-          >
-            <Image
-              src="/introStar.svg"
-              alt="Decorative star"
-              width={60}
-              height={60}
-              className="star-image"
-            />
-          </motion.div>
-
-          <div className="introductionStatement text-center">
-            Hi. I'm Carl. A <br />
-            {currentText}
-            <motion.span
-              animate={{ opacity: [1, 0] }}
-              transition={{
-                duration: 0.8,
-                repeat: Infinity,
-                repeatType: "reverse",
-              }}
+          <div className="flex justify-center relative">
+            <motion.div
+              className="top-star"
+              animate={topStarControls}
+              initial={{ scale: 1, rotate: 0 }}
+              onHoverStart={() => setIsTopHovering(true)}
+              onHoverEnd={() => setIsTopHovering(false)}
             >
-              |
-            </motion.span>
-          </div>
+              <Image
+                src="/introStar.svg"
+                alt="Decorative star"
+                width={60}
+                height={60}
+                className="star-image"
+              />
+            </motion.div>
 
-          <motion.div
-            className="bottom-star"
-            animate={bottomStarControls}
-            initial={{ scale: 1, rotate: 0 }}
-            onHoverStart={() => setIsBottomHovering(true)}
-            onHoverEnd={() => setIsBottomHovering(false)}
-          >
-            <Image
-              src="/introStar.svg"
-              alt="Decorative star"
-              width={60}
-              height={60}
-              className="star-image"
-            />
-          </motion.div>
-       
+            <div className="introductionStatement text-center">
+              Hi. I'm Carl. A <br />
+              {currentText}
+              <motion.span
+                animate={{ opacity: [1, 0] }}
+                transition={{
+                  duration: 0.8,
+                  repeat: Infinity,
+                  repeatType: "reverse",
+                }}
+              >
+                |
+              </motion.span>
+            </div>
+
+            <motion.div
+              className="bottom-star"
+              animate={bottomStarControls}
+              initial={{ scale: 1, rotate: 0 }}
+              onHoverStart={() => setIsBottomHovering(true)}
+              onHoverEnd={() => setIsBottomHovering(false)}
+            >
+              <Image
+                src="/introStar.svg"
+                alt="Decorative star"
+                width={60}
+                height={60}
+                className="star-image"
+              />
+            </motion.div>
+          </div>
+          <span className="introDescription text-center">
+            I'm passionate in creating modern web designs that improve user
+            experience through aesthetics and motion
+          </span>
         </div>
-        <span className="introDescription text-center">
-          I'm passionate in creating modern web designs that improve user
-          experience through aesthetics and motion
-        </span>
-        </div>
-                <div className="aboutBlock flex flex-col justify-center items-center">
+        <div className="aboutBlock flex flex-col justify-center items-center">
           <span className="aboutTitle">About me</span>
           <span className="aboutDescription">
             A 19 year old bloke whose hobby is to create websites. Started with
@@ -342,8 +359,56 @@ export default function Home() {
           </div>
         </div>
         <div className="projects">
-          <div className="project-title">
-            Projects
+          <div className="project-header">My Projects</div>
+          <div className="project-container">
+            <div className="project-title">GAPP</div>
+            <div className="project-description   ">
+              A game searcher app. This is my first ever project after escaping
+              the tutorial hell and the simple projects such as to-do list,
+              calculators, etc. It is built using vanilla JS where I learned DOM
+              manipulation and fetching request from APIs.
+            </div>
+            <div className="project-photo">
+              <Image
+                src="/projects/GAPP.svg"
+                alt="Game Searcher App"
+                width={800}
+                height={100}
+                className="GAPP img"
+              />
+            </div>
+            <div className="tech-used flex">
+              <div className="javascript flex">
+                <Image
+                  src="/icons/js-icon.svg"
+                  alt="js-icon"
+                  width={20}
+                  height={20}
+                  className="s-icon"
+                />
+                <span className="tech-title">Javascript</span>
+                <div className=" flex">
+                  <Image
+                    src="/icons/css-icon.svg"
+                    alt="js-icon"
+                    width={20}
+                    height={20}
+                    className="s-icon"
+                  />
+                  <span className="tech-title">CSS</span>
+                  <div className="html flex">
+                    <Image
+                      src="/icons/html-icon.svg"
+                      alt="html-icon"
+                      width={20}
+                      height={20}
+                      className="s-icon"
+                    />
+                    <span className="tech-title">HTML</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

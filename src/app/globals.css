@@ -448,3 +448,7 @@ body {
     left: 5px;
   }
 }
+
+.project-header {
+  font-size: 2rem;
+}
