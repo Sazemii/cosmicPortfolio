@@ -452,3 +452,48 @@ body {
 .project-header {
   font-size: 2rem;
 }
+
+.project-container {
+  max-width: 70%;
+}
+
+.project-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: .13rem;
+}
+
+.project-description {
+  font-size: .83rem;
+  color:rgb(189, 189, 189);
+}
+
+.project-photo {
+  align-self: center;
+}
+
+.tech-used {
+  display: flex;
+  gap: 1rem;
+} 
+
+.javascript,.css,.html {
+  gap:.3rem;
+  border: 1px solid white;
+
+  border-radius: 20px;
+  min-width: 100px;
+  padding: 0.2rem .5rem;
+  display: flex;
+  align-items: center;
+
+  
+}
+
+.tech-title {
+  font-size: 1rem;
+  font-weight: 200;
+}
+
+
+

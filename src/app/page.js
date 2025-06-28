@@ -358,9 +358,9 @@ export default function Home() {
             </span>
           </div>
         </div>
-        <div className="projects">
+        <div className="projects flex flex-col flex-center items-center">
           <div className="project-header">My Projects</div>
-          <div className="project-container">
+          <div className="project-container flex flex-col">
             <div className="project-title">GAPP</div>
             <div className="project-description   ">
               A game searcher app. This is my first ever project after escaping
@@ -387,7 +387,9 @@ export default function Home() {
                   className="s-icon"
                 />
                 <span className="tech-title">Javascript</span>
-                <div className=" flex">
+                </div>
+
+                <div className="css flex">
                   <Image
                     src="/icons/css-icon.svg"
                     alt="js-icon"
@@ -396,6 +398,7 @@ export default function Home() {
                     className="s-icon"
                   />
                   <span className="tech-title">CSS</span>
+                  </div>
                   <div className="html flex">
                     <Image
                       src="/icons/html-icon.svg"
@@ -405,8 +408,8 @@ export default function Home() {
                       className="s-icon"
                     />
                     <span className="tech-title">HTML</span>
-                  </div>
-                </div>
+            
+             
               </div>
             </div>
           </div>
