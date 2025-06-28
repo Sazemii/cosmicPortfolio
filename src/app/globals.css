@@ -453,8 +453,35 @@ body {
   font-size: 2rem;
 }
 
+@media (max-width: 768px) {
+  .project-header {
+    font-size: 1.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .project-header {
+    font-size: 1.4rem;
+  }
+}
+
 .project-container {
   max-width: 70%;
+  gap: .3rem;
+}
+
+@media (max-width: 768px) {
+  .project-container {
+    max-width: 80%;
+    gap: .5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .project-container {
+    max-width: 90%;
+
+  }
 }
 
 .project-title {
@@ -463,9 +490,33 @@ body {
   letter-spacing: .13rem;
 }
 
+@media (max-width: 768px) {
+  .project-title {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .project-title {
+    font-size: 1.1rem;
+  }
+}
+
 .project-description {
-  font-size: .83rem;
+  font-size: .9rem;
   color:rgb(189, 189, 189);
+}
+
+@media (max-width: 768px) {
+  .project-description {
+    font-size: .9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .project-description {
+    font-size: .8rem;
+  }
 }
 
 .project-photo {
@@ -474,15 +525,27 @@ body {
 
 .tech-used {
   display: flex;
-  gap: 1rem;
-} 
+  gap: .7rem;
+}
+
+@media (max-width: 640px) {
+  .tech-used {
+    gap: .5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .tech-used {
+    gap: .4rem;
+  }
+}
 
 .javascript,.css,.html {
   gap:.3rem;
   border: 1px solid white;
 
-  border-radius: 20px;
-  min-width: 100px;
+  border-radius: 10px;
+  min-width: 80px;
   padding: 0.2rem .5rem;
   display: flex;
   align-items: center;
@@ -490,10 +553,58 @@ body {
   
 }
 
-.tech-title {
-  font-size: 1rem;
-  font-weight: 200;
+@media (max-width: 640px) {
+  .javascript,.css,.html {
+    min-width: 70px;
+    padding: 0.15rem .4rem;
+    gap: .2rem;
+  }
 }
+
+@media (max-width: 480px) {
+  .javascript,.css,.html {
+    min-width: 60px;
+    padding: 0.1rem .3rem;
+    gap: .15rem;
+  }
+}
+
+.tech-title {
+  font-size: .8rem;
+  font-weight: 300;
+}
+
+@media (max-width: 640px) {
+  .tech-title {
+    font-size: .75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .tech-title {
+    font-size: .7rem;
+  }
+}
+
+.s-icon {
+  width: .9rem;  
+  height: .9rem;
+}
+
+@media (max-width: 640px) {
+  .s-icon {
+    width: .8rem;
+    height: .8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .s-icon {
+    width: .7rem;
+    height: .7rem;
+  }
+}
+
 
 
 
