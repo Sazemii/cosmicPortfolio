@@ -412,6 +412,28 @@ export default function Home() {
              
               </div>
             </div>
+            <div className="pagination flex justify-center items-center gap-[1rem]">
+            <Image
+                      src="/icons/previouspage.svg"
+                      alt="html-icon"
+                      width={40}
+                      height={40}
+                      className="s-icon"
+                    />
+            <span className="page-number">1</span>
+            <span className="page-number">2</span>
+            <span className="page-number">3</span>
+            <span className="page-number">4</span>
+            <span className="page-number">5</span>
+
+            <Image
+                      src="/icons/nextpage.svg"
+                      alt="html-icon"
+                      width={40}
+                      height={40}
+                      className="s-icon"
+                    />
+            </div>
           </div>
         </div>
       </div>
