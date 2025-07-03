@@ -439,13 +439,7 @@ export default function Home() {
         </div>
         <div className="projects flex flex-col flex-center items-center">
           <div className="project-header">My Projects</div>
-          <motion.div 
-            className="project-container flex flex-col"
-            key={activePage}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-          >
+          <div className="project-container flex flex-col">
             <div className="project-title">{currentProject.name}</div>
             <div className="project-description   ">{currentProject.description}</div>
             <div className="project-photo">
@@ -505,7 +499,7 @@ export default function Home() {
                 />
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </main>
