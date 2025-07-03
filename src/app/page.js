@@ -8,6 +8,7 @@ import { createIcons, icons } from "lucide-react";
 export default function Home() {
   const [activeTab, setActiveTab] = useState("home");
   const [indicatorStyle, setIndicatorStyle] = useState({});
+  const [activePage, setActivePage] = useState(1);
   const topStarControls = useAnimationControls();
   const bottomStarControls = useAnimationControls();
   const [isTopHovering, setIsTopHovering] = useState(false);
@@ -20,6 +21,66 @@ export default function Home() {
 
   const texts = ["UI designer", "frontend developer"];
 
+  const projects = [
+    {
+      id: 1,
+      name: "GAPP",
+      description: "A game searcher app. This is my first ever project after escaping the tutorial hell and the simple projects such as to-do list, calculators, etc. It is built using vanilla JS where I learned DOM manipulation and fetching request from APIs.",
+      image: "/projects/GAPP.svg",
+      tools: [
+        { name: "Javascript", icon: "/icons/js-icon.svg" },
+        { name: "CSS", icon: "/icons/css-icon.svg" },
+        { name: "HTML", icon: "/icons/html-icon.svg" }
+      ]
+    },
+    {
+      id: 2,
+      name: "Fintech Mockup",
+      description: "Made this to experiment with the visuals that ChartJS can bring. This is also my first react project, could be improved by adding excel exports options. Overall, just a simple project for data visualization.",
+      image: "/projects/Fintech.svg",
+      tools: [
+        { name: "React", icon: "/icons/react-icon.svg" },
+        { name: "CSS", icon: "/icons/css-icon.svg" }
+      ]
+    },
+    {
+      id: 3,
+      name: "Panakbo",
+      description: "Being a fan of sneakers, I made this purely for demonstration and aesthetics. First time I've incorporated some motion using vanilla css. Most importantly, I learned how to make projects responsive which is so time-consuming, but worth it.",
+      image: "/projects/Panakbo.svg",
+      tools: [
+        { name: "NextJS", icon: "/icons/nextjs-icon.svg" },
+        { name: "React", icon: "/icons/react-icon.svg" },
+        { name: "CSS", icon: "/icons/css-icon.svg" }
+      ]
+    },
+    {
+      id: 4,
+      name: "TalaCheck",
+      description: "A school project proposal about fake news. Used OCR technology then interpret the data obtained using NLP word comparison and Hugging Face AI verdict. Also had fun making the pop-ups and scroll-based animations.",
+      image: "/projects/TalaCheck.svg",
+      tools: [
+        { name: "NextJS", icon: "/icons/nextjs-icon.svg" },
+        { name: "React", icon: "/icons/react-icon.svg" },
+        { name: "CSS", icon: "/icons/css-icon.svg" },
+        { name: "Tailwind", icon: "/icons/tailwind-icon.svg" }
+      ]
+    },
+    {
+      id: 5,
+      name: "Color Haven",
+      description: "I really like experimenting with color schemes. With this, I made an app that let you see whether the palette you chose is visually appealing by making realtime changes on the elements and SVGs in the site.",
+      image: "/projects/ColorHaven.svg",
+      tools: [
+        { name: "NextJS", icon: "/icons/nextjs-icon.svg" },
+        { name: "React", icon: "/icons/react-icon.svg" },
+        { name: "CSS", icon: "/icons/css-icon.svg" },
+        { name: "Tailwind", icon: "/icons/tailwind-icon.svg" }
+      ]
+    }
+  ];
+
+  const currentProject = projects[activePage - 1];
   const navRefs = {
     home: useRef(null),
     about: useRef(null),
@@ -124,6 +185,24 @@ export default function Home() {
             handleStarAnimation(controls, animRef);
           }
         });
+    }
+  };
+
+  const handlePageClick = (pageNumber) => {
+    if (pageNumber >= 1 && pageNumber <= projects.length) {
+      setActivePage(pageNumber);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (activePage > 1) {
+      setActivePage(activePage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (activePage < projects.length) {
+      setActivePage(activePage + 1);
     }
   };
 
@@ -360,81 +439,73 @@ export default function Home() {
         </div>
         <div className="projects flex flex-col flex-center items-center">
           <div className="project-header">My Projects</div>
-          <div className="project-container flex flex-col">
-            <div className="project-title">GAPP</div>
-            <div className="project-description   ">
-              A game searcher app. This is my first ever project after escaping
-              the tutorial hell and the simple projects such as to-do list,
-              calculators, etc. It is built using vanilla JS where I learned DOM
-              manipulation and fetching request from APIs.
-            </div>
+          <motion.div 
+            className="project-container flex flex-col"
+            key={activePage}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+          >
+            <div className="project-title">{currentProject.name}</div>
+            <div className="project-description   ">{currentProject.description}</div>
             <div className="project-photo">
               <Image
-                src="/projects/GAPP.svg"
-                alt="Game Searcher App"
+                src={currentProject.image}
+                alt={currentProject.name}
                 width={800}
                 height={100}
-                className="GAPP img"
+                className="project-img"
               />
             </div>
             <div className="tech-used flex">
-              <div className="javascript flex">
-                <Image
-                  src="/icons/js-icon.svg"
-                  alt="js-icon"
-                  width={20}
-                  height={20}
-                  className="s-icon"
-                />
-                <span className="tech-title">Javascript</span>
-                </div>
-
-                <div className="css flex">
+              {currentProject.tools.map((tool, index) => (
+                <div key={index} className="tech-item flex">
                   <Image
-                    src="/icons/css-icon.svg"
-                    alt="js-icon"
+                    src={tool.icon}
+                    alt={tool.name}
                     width={20}
                     height={20}
                     className="s-icon"
                   />
-                  <span className="tech-title">CSS</span>
-                  </div>
-                  <div className="html flex">
-                    <Image
-                      src="/icons/html-icon.svg"
-                      alt="html-icon"
-                      width={20}
-                      height={20}
-                      className="s-icon"
-                    />
-                    <span className="tech-title">HTML</span>
-            
-             
+                  <span className="tech-title">{tool.name}</span>
+                </div>
+              ))}
+            </div>
+            <div className="pagination flex justify-center items-center gap-[.3rem]">
+              <div 
+                className={`pagination-icon ${activePage === 1 ? 'disabled' : ''}`}
+                onClick={handlePreviousPage}
+              >
+                <Image
+                  src="/icons/previouspage.svg"
+                  alt="previous page"
+                  width={25}
+                  height={25}
+                />
+              </div>
+              {projects.map((_, index) => (
+                <span 
+                  key={index + 1}
+                  className={`page-number ${activePage === index + 1 ? 'active' : ''}`}
+                  onClick={() => handlePageClick(index + 1)}
+                >
+                  {index + 1}
+                </span>
+              ))}
+
+              <div 
+                className={`pagination-icon ${activePage === projects.length ? 'disabled' : ''}`}
+                onClick={handleNextPage}
+              >
+                <Image
+                  src="/icons/nextpage.svg"
+                  alt="next page"
+                  width={25}
+                  height={25}
+                />
               </div>
             </div>
-            <div className="pagination flex justify-center items-center gap-[1rem]">
-            <Image
-                      src="/icons/previouspage.svg"
-                      alt="html-icon"
-                      width={40}
-                      height={40}
-                      className="s-icon"
-                    />
-            <span className="page-number">1</span>
-            <span className="page-number">2</span>
-            <span className="page-number">3</span>
-            <span className="page-number">4</span>
-            <span className="page-number">5</span>
-
-            <Image
-                      src="/icons/nextpage.svg"
-                      alt="html-icon"
-                      width={40}
-                      height={40}
-                      className="s-icon"
-                    />
-            </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </main>
