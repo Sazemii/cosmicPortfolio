@@ -25,59 +25,64 @@ export default function Home() {
     {
       id: 1,
       name: "GAPP",
-      description: "A game searcher app. This is my first ever project after escaping the tutorial hell and the simple projects such as to-do list, calculators, etc. It is built using vanilla JS where I learned DOM manipulation and fetching request from APIs.",
+      description:
+        "A game searcher app. This is my first ever project after escaping the tutorial hell and the simple projects such as to-do list, calculators, etc. It is built using vanilla JS where I learned DOM manipulation and fetching request from APIs.",
       image: "/projects/GAPP.svg",
       tools: [
         { name: "Javascript", icon: "/icons/js-icon.svg" },
         { name: "CSS", icon: "/icons/css-icon.svg" },
-        { name: "HTML", icon: "/icons/html-icon.svg" }
-      ]
+        { name: "HTML", icon: "/icons/html-icon.svg" },
+      ],
     },
     {
       id: 2,
       name: "Fintech Mockup",
-      description: "Made this to experiment with the visuals that ChartJS can bring. This is also my first react project, could be improved by adding excel exports options. Overall, just a simple project for data visualization.",
+      description:
+        "Made this to experiment with the visuals that ChartJS can bring. This is also my first react project, could be improved by adding excel exports options. Overall, just a simple project for data visualization.",
       image: "/projects/Fintech.svg",
       tools: [
         { name: "React", icon: "/icons/react-icon.svg" },
-        { name: "CSS", icon: "/icons/css-icon.svg" }
-      ]
+        { name: "CSS", icon: "/icons/css-icon.svg" },
+      ],
     },
     {
       id: 3,
       name: "Panakbo",
-      description: "Being a fan of sneakers, I made this purely for demonstration and aesthetics. First time I've incorporated some motion using vanilla css. Most importantly, I learned how to make projects responsive which is so time-consuming, but worth it.",
+      description:
+        "Being a fan of sneakers, I made this purely for demonstration and aesthetics. First time I've incorporated some motion using vanilla css. Most importantly, I learned how to make projects responsive which is so time-consuming, but worth it.",
       image: "/projects/Panakbo.svg",
       tools: [
         { name: "NextJS", icon: "/icons/nextjs-icon.svg" },
         { name: "React", icon: "/icons/react-icon.svg" },
-        { name: "CSS", icon: "/icons/css-icon.svg" }
-      ]
+        { name: "CSS", icon: "/icons/css-icon.svg" },
+      ],
     },
     {
       id: 4,
       name: "TalaCheck",
-      description: "A school project proposal about fake news. Used OCR technology then interpret the data obtained using NLP word comparison and Hugging Face AI verdict. Also had fun making the pop-ups and scroll-based animations.",
+      description:
+        "A school project proposal about fake news. Used OCR technology then interpret the data obtained using NLP word comparison and Hugging Face AI verdict. Also had fun making the pop-ups and scroll-based animations.",
       image: "/projects/TalaCheck.svg",
       tools: [
         { name: "NextJS", icon: "/icons/nextjs-icon.svg" },
         { name: "React", icon: "/icons/react-icon.svg" },
         { name: "CSS", icon: "/icons/css-icon.svg" },
-        { name: "Tailwind", icon: "/icons/tailwind-icon.svg" }
-      ]
+        { name: "Tailwind", icon: "/icons/tailwind-icon.svg" },
+      ],
     },
     {
       id: 5,
       name: "Color Haven",
-      description: "I really like experimenting with color schemes. With this, I made an app that let you see whether the palette you chose is visually appealing by making realtime changes on the elements and SVGs in the site.",
+      description:
+        "I really like experimenting with color schemes. With this, I made an app that let you see whether the palette you chose is visually appealing by making realtime changes on the elements and SVGs in the site.",
       image: "/projects/ColorHaven.svg",
       tools: [
         { name: "NextJS", icon: "/icons/nextjs-icon.svg" },
         { name: "React", icon: "/icons/react-icon.svg" },
         { name: "CSS", icon: "/icons/css-icon.svg" },
-        { name: "Tailwind", icon: "/icons/tailwind-icon.svg" }
-      ]
-    }
+        { name: "Tailwind", icon: "/icons/tailwind-icon.svg" },
+      ],
+    },
   ];
 
   const currentProject = projects[activePage - 1];
@@ -223,6 +228,20 @@ export default function Home() {
   return (
     <main className="">
       <StarField />
+
+      {/* Preload all project images for better performance */}
+      <div style={{ display: "none" }}>
+        {projects.map((project) => (
+          <Image
+            key={`preload-${project.id}`}
+            src={project.image}
+            alt=""
+            width={800}
+            height={450}
+            priority={project.id <= 2}
+          />
+        ))}
+      </div>
 
       <div className="gradient-circles-container">
         <motion.div
@@ -441,14 +460,23 @@ export default function Home() {
           <div className="project-header">My Projects</div>
           <div className="project-container flex flex-col">
             <div className="project-title">{currentProject.name}</div>
-            <div className="project-description   ">{currentProject.description}</div>
+            <div className="project-description   ">
+              {currentProject.description}
+            </div>
             <div className="project-photo">
               <Image
                 src={currentProject.image}
                 alt={currentProject.name}
-                width={800}
-                height={100}
+                width={1000}
+                height={600}
                 className="project-img"
+                priority={true}
+                sizes="(max-width: 900px) 100vw, (max-width: 1200px) 80vw, 70vw"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                }}
               />
             </div>
             <div className="tech-used flex">
@@ -466,8 +494,10 @@ export default function Home() {
               ))}
             </div>
             <div className="pagination flex justify-center items-center gap-[.3rem]">
-              <div 
-                className={`pagination-icon ${activePage === 1 ? 'disabled' : ''}`}
+              <div
+                className={`pagination-icon ${
+                  activePage === 1 ? "disabled" : ""
+                }`}
                 onClick={handlePreviousPage}
               >
                 <Image
@@ -478,17 +508,21 @@ export default function Home() {
                 />
               </div>
               {projects.map((_, index) => (
-                <span 
+                <span
                   key={index + 1}
-                  className={`page-number ${activePage === index + 1 ? 'active' : ''}`}
+                  className={`page-number ${
+                    activePage === index + 1 ? "active" : ""
+                  }`}
                   onClick={() => handlePageClick(index + 1)}
                 >
                   {index + 1}
                 </span>
               ))}
 
-              <div 
-                className={`pagination-icon ${activePage === projects.length ? 'disabled' : ''}`}
+              <div
+                className={`pagination-icon ${
+                  activePage === projects.length ? "disabled" : ""
+                }`}
                 onClick={handleNextPage}
               >
                 <Image
