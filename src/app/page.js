@@ -749,6 +749,9 @@ export default function Home() {
             </div>
           </div>
         </div>
+        <div className="max-w-[70%] w-[70%]">
+          <div className="text-stack flex algin-self">Tech Stack</div>
+        </div>
       </div>
     </main>
   );
