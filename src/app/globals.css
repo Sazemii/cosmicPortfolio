@@ -682,6 +682,7 @@ body {
   justify-content: center;
   min-width: clamp(1.8rem, 4vw, 2.2rem);
   min-height: clamp(1.8rem, 4vw, 2.2rem);
+  font-weight: 700;
 }
 
 .page-number:hover {
@@ -689,8 +690,8 @@ body {
 }
 
 .page-number.active {
-  border: 1px solid #895fbc;
-  color: #895fbc;
+  border: 2px solid #a16ae4;
+  color: #a16ae4;
 }
 
 @media (max-width: 640px) {
