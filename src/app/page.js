@@ -751,6 +751,15 @@ export default function Home() {
         </div>
         <div className="max-w-[70%] w-[70%]">
           <div className="text-stack flex algin-self">Tech Stack</div>
+          <div className="tech-card flex justify-center flex-col items-center gap-[.3rem]">
+            <Image
+              src="/stack-icons/css.svg"
+              alt="this.name"
+              width={40}
+              height={30}
+            />
+            <span className="text-[.76rem] card-name">CSS</span>
+          </div>
         </div>
       </div>
     </main>

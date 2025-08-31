@@ -798,3 +798,8 @@ body {
 .close-button:hover {
   transform: scale(1.1);
 }
+
+.card-name {
+  font-family: var(--font-inter), sans-serif !important;
+  font-weight: 600;
+}
