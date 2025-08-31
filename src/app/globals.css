@@ -856,6 +856,87 @@ body {
   grid-template-columns: repeat(6, 1fr);
   gap: 1rem;
   width: 100%;
+  position: relative;
+}
+
+/* Snake Light that travels along card borders */
+.tech-stack-grid::before {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: radial-gradient(circle, #64b5f6 0%, #42a5f5 50%, transparent 70%);
+  border-radius: 50%;
+  box-shadow: 
+    0 0 10px #64b5f6,
+    0 0 20px #42a5f5,
+    0 0 30px rgba(100, 181, 246, 0.3);
+  z-index: 10;
+  animation: snakeLight 24s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes snakeLight {
+  /* Card 1 (top-left) */
+  0% { top: -4px; left: calc(0% - 4px); }
+  2% { top: -4px; left: calc(16.666% - 4px); }
+  4% { top: calc(50% - 4px); left: calc(16.666% - 4px); }
+  6% { top: calc(100% + 4px); left: calc(16.666% - 4px); }
+  8% { top: calc(100% + 4px); left: calc(0% - 4px); }
+  10% { top: -4px; left: calc(0% - 4px); }
+  
+  /* Move to Card 2 */
+  12% { top: -4px; left: calc(16.666% + 1rem - 4px); }
+  
+  /* Card 2 */
+  14% { top: -4px; left: calc(33.333% - 4px); }
+  16% { top: calc(50% - 4px); left: calc(33.333% - 4px); }
+  18% { top: calc(100% + 4px); left: calc(33.333% - 4px); }
+  20% { top: calc(100% + 4px); left: calc(16.666% + 1rem - 4px); }
+  22% { top: -4px; left: calc(16.666% + 1rem - 4px); }
+  
+  /* Move to Card 3 */
+  24% { top: -4px; left: calc(33.333% + 1rem - 4px); }
+  
+  /* Card 3 */
+  26% { top: -4px; left: calc(50% - 4px); }
+  28% { top: calc(50% - 4px); left: calc(50% - 4px); }
+  30% { top: calc(100% + 4px); left: calc(50% - 4px); }
+  32% { top: calc(100% + 4px); left: calc(33.333% + 1rem - 4px); }
+  34% { top: -4px; left: calc(33.333% + 1rem - 4px); }
+  
+  /* Move to Card 4 */
+  36% { top: -4px; left: calc(50% + 1rem - 4px); }
+  
+  /* Card 4 */
+  38% { top: -4px; left: calc(66.666% - 4px); }
+  40% { top: calc(50% - 4px); left: calc(66.666% - 4px); }
+  42% { top: calc(100% + 4px); left: calc(66.666% - 4px); }
+  44% { top: calc(100% + 4px); left: calc(50% + 1rem - 4px); }
+  46% { top: -4px; left: calc(50% + 1rem - 4px); }
+  
+  /* Move to Card 5 */
+  48% { top: -4px; left: calc(66.666% + 1rem - 4px); }
+  
+  /* Card 5 */
+  50% { top: -4px; left: calc(83.333% - 4px); }
+  52% { top: calc(50% - 4px); left: calc(83.333% - 4px); }
+  54% { top: calc(100% + 4px); left: calc(83.333% - 4px); }
+  56% { top: calc(100% + 4px); left: calc(66.666% + 1rem - 4px); }
+  58% { top: -4px; left: calc(66.666% + 1rem - 4px); }
+  
+  /* Move to Card 6 */
+  60% { top: -4px; left: calc(83.333% + 1rem - 4px); }
+  
+  /* Card 6 */
+  62% { top: -4px; left: calc(100% + 4px); }
+  64% { top: calc(50% - 4px); left: calc(100% + 4px); }
+  66% { top: calc(100% + 4px); left: calc(100% + 4px); }
+  68% { top: calc(100% + 4px); left: calc(83.333% + 1rem - 4px); }
+  70% { top: -4px; left: calc(83.333% + 1rem - 4px); }
+  
+  /* Return to start for seamless loop */
+  100% { top: -4px; left: calc(0% - 4px); }
 }
 
 .tech-card {
