@@ -749,16 +749,189 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="max-w-[70%] w-[70%]">
-          <div className="text-stack flex algin-self">Tech Stack</div>
-          <div className="tech-card flex justify-center flex-col items-center gap-[.3rem]">
-            <Image
-              src="/stack-icons/css.svg"
-              alt="this.name"
-              width={40}
-              height={30}
-            />
-            <span className="text-[.76rem] card-name">CSS</span>
+        <div className="tech-stack-container flex flex-col justify-center">
+          <div className="tech-stack-title">Tech Stack</div>
+          <div className="tech-stack-grid">
+            <div className="tech-card flex justify-center flex-col items-center">
+              <Image
+                src="/stack-icons/ReactJS.svg"
+                alt="React"
+                width={40}
+                height={40}
+                className="tech-stack-icon"
+              />
+              <span className="tech-stack-name">React</span>
+            </div>
+            <div className="tech-card flex justify-center flex-col items-center">
+              <Image
+                src="/stack-icons/NextJS.svg"
+                alt="Next.js"
+                width={40}
+                height={40}
+                className="tech-stack-icon"
+              />
+              <span className="tech-stack-name">Next.js</span>
+            </div>
+            <div className="tech-card flex justify-center flex-col items-center">
+              <Image
+                src="/stack-icons/Javascript.svg"
+                alt="JavaScript"
+                width={40}
+                height={40}
+                className="tech-stack-icon"
+              />
+              <span className="tech-stack-name">JavaScript</span>
+            </div>
+            <div className="tech-card flex justify-center flex-col items-center">
+              <Image
+                src="/stack-icons/css.svg"
+                alt="CSS"
+                width={40}
+                height={40}
+                className="tech-stack-icon"
+              />
+              <span className="tech-stack-name">CSS</span>
+            </div>
+            <div className="tech-card flex justify-center flex-col items-center">
+              <Image
+                src="/stack-icons/tailwind.svg"
+                alt="Tailwind CSS"
+                width={40}
+                height={40}
+                className="tech-stack-icon"
+              />
+              <span className="tech-stack-name">Tailwind</span>
+            </div>
+            <div className="tech-card flex justify-center flex-col items-center">
+              <Image
+                src="/stack-icons/NodeJS.svg"
+                alt="Node.js"
+                width={40}
+                height={40}
+                className="tech-stack-icon"
+              />
+              <span className="tech-stack-name">Node.js</span>
+            </div>
+            <div className="tech-card flex justify-center flex-col items-center">
+              <Image
+                src="/stack-icons/MongoDB.svg"
+                alt="MongoDB"
+                width={40}
+                height={40}
+                className="tech-stack-icon"
+              />
+              <span className="tech-stack-name">MongoDB</span>
+            </div>
+            <div className="tech-card flex justify-center flex-col items-center">
+              <Image
+                src="/stack-icons/PostgreSQL.svg"
+                alt="PostgreSQL"
+                width={40}
+                height={40}
+                className="tech-stack-icon"
+              />
+              <span className="tech-stack-name">PostgreSQL</span>
+            </div>
+            <div className="tech-card flex justify-center flex-col items-center">
+              <Image
+                src="/stack-icons/Git.svg"
+                alt="Git"
+                width={40}
+                height={40}
+                className="tech-stack-icon"
+              />
+              <span className="tech-stack-name">Git</span>
+            </div>
+            <div className="tech-card flex justify-center flex-col items-center">
+              <Image
+                src="/stack-icons/Github.svg"
+                alt="GitHub"
+                width={40}
+                height={40}
+                className="tech-stack-icon"
+              />
+              <span className="tech-stack-name">GitHub</span>
+            </div>
+            <div className="tech-card flex justify-center flex-col items-center">
+              <Image
+                src="/stack-icons/figma.svg"
+                alt="Figma"
+                width={40}
+                height={40}
+                className="tech-stack-icon"
+              />
+              <span className="tech-stack-name">Figma</span>
+            </div>
+            <div className="tech-card flex justify-center flex-col items-center">
+              <Image
+                src="/stack-icons/Vercel.svg"
+                alt="Vercel"
+                width={40}
+                height={40}
+                className="tech-stack-icon"
+              />
+              <span className="tech-stack-name">Vercel</span>
+            </div>
+            <div className="tech-card flex justify-center flex-col items-center">
+              <Image
+                src="/stack-icons/framer.svg"
+                alt="Framer Motion"
+                width={40}
+                height={40}
+                className="tech-stack-icon"
+              />
+              <span className="tech-stack-name">Framer</span>
+            </div>
+            <div className="tech-card flex justify-center flex-col items-center">
+              <Image
+                src="/stack-icons/GSAP.svg"
+                alt="GSAP"
+                width={40}
+                height={40}
+                className="tech-stack-icon"
+              />
+              <span className="tech-stack-name">GSAP</span>
+            </div>
+            <div className="tech-card flex justify-center flex-col items-center">
+              <Image
+                src="/stack-icons/Postman.svg"
+                alt="Postman"
+                width={40}
+                height={40}
+                className="tech-stack-icon"
+              />
+              <span className="tech-stack-name">Postman</span>
+            </div>
+            <div className="tech-card flex justify-center flex-col items-center">
+              <Image
+                src="/stack-icons/Python.svg"
+                alt="Python"
+                width={40}
+                height={40}
+                className="tech-stack-icon"
+              />
+              <span className="tech-stack-name">Python</span>
+            </div>
+            <div className="tech-card flex justify-center flex-col items-center">
+              <Image
+                src="/stack-icons/Java.svg"
+                alt="Java"
+                width={40}
+                height={40}
+                className="tech-stack-icon"
+              />
+              <span className="tech-stack-name">Java</span>
+            </div>
+            <div className="tech-card flex justify-center flex-col items-center">
+              <Image
+                src="/stack-icons/Aceternity.svg"
+                alt="Aceternity UI"
+                width={40}
+                height={40}
+                className="tech-stack-icon"
+              />
+              <span className="tech-stack-name">Aceternity</span>
+            </div>
           </div>
         </div>
       </div>
