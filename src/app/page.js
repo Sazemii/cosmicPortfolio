@@ -3,12 +3,15 @@ import { useState, useRef, useEffect } from "react";
 import { motion, useAnimationControls } from "framer-motion";
 import Image from "next/image";
 import StarField from "../components/StarField";
-import { createIcons, icons } from "lucide-react";
+import { Settings, X } from "lucide-react";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("home");
   const [indicatorStyle, setIndicatorStyle] = useState({});
   const [activePage, setActivePage] = useState(1);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [decorationsEnabled, setDecorationsEnabled] = useState(true);
+  const [motionEnabled, setMotionEnabled] = useState(true);
   const topStarControls = useAnimationControls();
   const bottomStarControls = useAnimationControls();
   const [isTopHovering, setIsTopHovering] = useState(false);
@@ -18,6 +21,8 @@ export default function Home() {
   const [isErasing, setIsErasing] = useState(false);
   const [textIndex, setTextIndex] = useState(0);
   const [cycleComplete, setCycleComplete] = useState(false);
+  const [initialAnimationComplete, setInitialAnimationComplete] =
+    useState(false);
 
   const texts = ["UI designer", "frontend developer"];
 
@@ -119,7 +124,7 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if (cycleComplete) return;
+    if (cycleComplete || !motionEnabled) return;
 
     const currentFullText = texts[textIndex];
 
@@ -152,7 +157,30 @@ export default function Home() {
         setIsTyping(true);
       }
     }
-  }, [currentText, isTyping, isErasing, textIndex, cycleComplete]);
+  }, [
+    currentText,
+    isTyping,
+    isErasing,
+    textIndex,
+    cycleComplete,
+    motionEnabled,
+  ]);
+
+  // Set static text when motion is disabled
+  useEffect(() => {
+    if (!motionEnabled) {
+      setCurrentText("UI designer");
+      setIsTyping(false);
+      setIsErasing(false);
+      setCycleComplete(true);
+    } else if (motionEnabled && cycleComplete) {
+      // Reset animation when motion is re-enabled
+      setCurrentText("");
+      setTextIndex(0);
+      setCycleComplete(false);
+      setIsTyping(true);
+    }
+  }, [motionEnabled]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -211,6 +239,36 @@ export default function Home() {
     }
   };
 
+  // Settings functions
+  const toggleSettings = () => {
+    setIsSettingsOpen(!isSettingsOpen);
+  };
+
+  const handleDecorationsToggle = () => {
+    const newValue = !decorationsEnabled;
+    setDecorationsEnabled(newValue);
+    localStorage.setItem("decorationsEnabled", JSON.stringify(newValue));
+  };
+
+  const handleMotionToggle = () => {
+    const newValue = !motionEnabled;
+    setMotionEnabled(newValue);
+    localStorage.setItem("motionEnabled", JSON.stringify(newValue));
+  };
+
+  // Load settings from localStorage on mount
+  useEffect(() => {
+    const savedDecorations = localStorage.getItem("decorationsEnabled");
+    const savedMotion = localStorage.getItem("motionEnabled");
+
+    if (savedDecorations !== null) {
+      setDecorationsEnabled(JSON.parse(savedDecorations));
+    }
+    if (savedMotion !== null) {
+      setMotionEnabled(JSON.parse(savedMotion));
+    }
+  }, []);
+
   useEffect(() => {
     topAnimationRef.current.isHovering = isTopHovering;
     if (isTopHovering && !topAnimationRef.current.isAnimating) {
@@ -225,9 +283,115 @@ export default function Home() {
     }
   }, [isBottomHovering]);
 
+  // Initial spin animation on first render
+  useEffect(() => {
+    if (!initialAnimationComplete && motionEnabled && decorationsEnabled) {
+      const performInitialAnimation = async () => {
+        // First spin the top star
+        await topStarControls.start({
+          rotate: [0, 360],
+          transition: {
+            duration: 1,
+            ease: "easeInOut",
+          },
+        });
+
+        // Then spin the bottom star
+        await bottomStarControls.start({
+          rotate: [0, 360],
+          transition: {
+            duration: 1,
+            ease: "easeInOut",
+          },
+        });
+
+        setInitialAnimationComplete(true);
+      };
+
+      performInitialAnimation();
+    }
+  }, [
+    motionEnabled,
+    decorationsEnabled,
+    initialAnimationComplete,
+    topStarControls,
+    bottomStarControls,
+  ]);
+
   return (
     <main className="">
       <StarField />
+
+      {/* Settings Button */}
+      <button
+        onClick={toggleSettings}
+        className="settings-button fixed top-4 left-4 z-50 bg-[#323232] hover:bg-[#404040] text-white p-3 rounded-full transition-all duration-300 shadow-lg"
+      >
+        <Settings size={20} />
+      </button>
+
+      {/* Settings Panel with Blur Background */}
+      {isSettingsOpen && (
+        <>
+          {/* Blur Overlay */}
+          <motion.div
+            className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm z-40"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={toggleSettings}
+          />
+
+          {/* Settings Panel */}
+          <motion.div
+            className="settings-panel fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 bg-[#1a1a1a] border border-[#333] rounded-lg p-6 shadow-2xl"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+          >
+            {/* Header */}
+            <div className="flex items-center gap-3 mb-6">
+              <Settings size={24} className="text-white" />
+              <h2 className="text-xl font-semibold text-white">Settings</h2>
+            </div>
+
+            {/* Settings Options */}
+            <div className="space-y-4 mb-6">
+              {/* Decorations Toggle */}
+              <div className="flex items-center justify-between">
+                <span className="text-white text-lg">Decorations</span>
+                <button
+                  onClick={handleDecorationsToggle}
+                  className={`toggle-switch ${
+                    decorationsEnabled ? "active" : ""
+                  }`}
+                >
+                  <div className="toggle-slider"></div>
+                </button>
+              </div>
+
+              {/* Motion Toggle */}
+              <div className="flex items-center justify-between">
+                <span className="text-white text-lg">Motion</span>
+                <button
+                  onClick={handleMotionToggle}
+                  className={`toggle-switch ${motionEnabled ? "active" : ""}`}
+                >
+                  <div className="toggle-slider"></div>
+                </button>
+              </div>
+            </div>
+
+            {/* Close Button */}
+            <button
+              onClick={toggleSettings}
+              className="close-button absolute bottom-4 right-4 bg-[#323232] hover:bg-[#404040] text-white p-2 rounded-full transition-all duration-300"
+            >
+              <X size={16} />
+            </button>
+          </motion.div>
+        </>
+      )}
 
       {/* Preload all project images for better performance */}
       <div style={{ display: "none" }}>
@@ -243,97 +407,135 @@ export default function Home() {
         ))}
       </div>
 
-      <div className="gradient-circles-container">
-        <motion.div
-          className="gradient-circle violet-circle"
-          initial={{ opacity: 0, scale: 0.8, x: 0, y: 0 }}
-          animate={{
-            opacity: [0.3, 0.6, 0.4, 0.7, 0.3],
-            scale: [1, 1.3, 0.9, 1.2, 1],
-            x: [0, 40, -20, 30, 0],
-            y: [0, 25, 40, -15, 0],
-            borderRadius: [
-              "74% 26% 47% 53% / 68% 46% 54% 32%",
-              "26% 74% 33% 67% / 54% 68% 32% 46%",
-              "67% 33% 74% 26% / 32% 54% 46% 68%",
-              "33% 67% 26% 74% / 46% 32% 68% 54%",
-              "74% 26% 47% 53% / 68% 46% 54% 32%",
-            ],
-            rotate: [0, 45, -30, 60, 0],
-          }}
-          transition={{
-            duration: 8,
-            ease: "easeInOut",
-            repeat: Infinity,
-            delay: 0.2,
-          }}
-          whileHover={{
-            scale: 1.4,
-            opacity: 0.8,
-            transition: { duration: 0.4 },
-          }}
-        />
+      {decorationsEnabled && (
+        <div className="gradient-circles-container">
+          <motion.div
+            className="gradient-circle violet-circle"
+            initial={{ opacity: 0, scale: 0.8, x: 0, y: 0 }}
+            animate={
+              motionEnabled
+                ? {
+                    opacity: [0.3, 0.6, 0.4, 0.7, 0.3],
+                    scale: [1, 1.3, 0.9, 1.2, 1],
+                    x: [0, 40, -20, 30, 0],
+                    y: [0, 25, 40, -15, 0],
+                    borderRadius: [
+                      "74% 26% 47% 53% / 68% 46% 54% 32%",
+                      "26% 74% 33% 67% / 54% 68% 32% 46%",
+                      "67% 33% 74% 26% / 32% 54% 46% 68%",
+                      "33% 67% 26% 74% / 46% 32% 68% 54%",
+                      "74% 26% 47% 53% / 68% 46% 54% 32%",
+                    ],
+                    rotate: [0, 45, -30, 60, 0],
+                  }
+                : { opacity: 0.4 }
+            }
+            transition={
+              motionEnabled
+                ? {
+                    duration: 8,
+                    ease: "easeInOut",
+                    repeat: Infinity,
+                    delay: 0.2,
+                  }
+                : { duration: 0 }
+            }
+            whileHover={
+              motionEnabled
+                ? {
+                    scale: 1.4,
+                    opacity: 0.8,
+                    transition: { duration: 0.4 },
+                  }
+                : {}
+            }
+          />
 
-        <motion.div
-          className="gradient-circle blue-circle"
-          initial={{ opacity: 0, scale: 0.8, x: 0, y: 0 }}
-          animate={{
-            opacity: [0.4, 0.3, 0.7, 0.5, 0.4],
-            scale: [1, 0.8, 1.4, 1.1, 1],
-            x: [0, -35, 25, -10, 0],
-            y: [0, 35, -20, 30, 0],
-            borderRadius: [
-              "63% 37% 54% 46% / 55% 48% 52% 45%",
-              "37% 63% 46% 54% / 48% 55% 45% 52%",
-              "54% 46% 63% 37% / 52% 45% 55% 48%",
-              "46% 54% 37% 63% / 45% 52% 48% 55%",
-              "63% 37% 54% 46% / 55% 48% 52% 45%",
-            ],
-            rotate: [0, -60, 90, -45, 0],
-          }}
-          transition={{
-            duration: 10,
-            ease: "easeInOut",
-            repeat: Infinity,
-            delay: 0.8,
-          }}
-          whileHover={{
-            scale: 1.5,
-            opacity: 0.9,
-            transition: { duration: 0.4 },
-          }}
-        />
+          <motion.div
+            className="gradient-circle blue-circle"
+            initial={{ opacity: 0, scale: 0.8, x: 0, y: 0 }}
+            animate={
+              motionEnabled
+                ? {
+                    opacity: [0.4, 0.3, 0.7, 0.5, 0.4],
+                    scale: [1, 0.8, 1.4, 1.1, 1],
+                    x: [0, -35, 25, -10, 0],
+                    y: [0, 35, -20, 30, 0],
+                    borderRadius: [
+                      "63% 37% 54% 46% / 55% 48% 52% 45%",
+                      "37% 63% 46% 54% / 48% 55% 45% 52%",
+                      "54% 46% 63% 37% / 52% 45% 55% 48%",
+                      "46% 54% 37% 63% / 45% 52% 48% 55%",
+                      "63% 37% 54% 46% / 55% 48% 52% 45%",
+                    ],
+                    rotate: [0, -60, 90, -45, 0],
+                  }
+                : { opacity: 0.3 }
+            }
+            transition={
+              motionEnabled
+                ? {
+                    duration: 10,
+                    ease: "easeInOut",
+                    repeat: Infinity,
+                    delay: 0.8,
+                  }
+                : { duration: 0 }
+            }
+            whileHover={
+              motionEnabled
+                ? {
+                    scale: 1.5,
+                    opacity: 0.9,
+                    transition: { duration: 0.4 },
+                  }
+                : {}
+            }
+          />
 
-        <motion.div
-          className="gradient-circle pink-circle"
-          initial={{ opacity: 0, scale: 0.8, x: 0, y: 0 }}
-          animate={{
-            opacity: [0.5, 0.7, 0.3, 0.6, 0.5],
-            scale: [1, 1.2, 1.5, 0.9, 1],
-            x: [0, 20, -30, 15, 0],
-            y: [0, -25, 20, -35, 0],
-            borderRadius: [
-              "81% 19% 33% 67% / 72% 44% 56% 28%",
-              "19% 81% 67% 33% / 44% 72% 28% 56%",
-              "33% 67% 81% 19% / 56% 28% 72% 44%",
-              "67% 33% 19% 81% / 28% 56% 44% 72%",
-              "81% 19% 33% 67% / 72% 44% 56% 28%",
-            ],
-            rotate: [0, 120, -90, 75, 0],
-          }}
-          transition={{
-            duration: 7,
-            ease: "easeInOut",
-            repeat: Infinity,
-            delay: 1.5,
-          }}
-          whileHover={{
-            scale: 1.6,
-            opacity: 0.8,
-            transition: { duration: 0.4 },
-          }}
-        />
-      </div>
+          <motion.div
+            className="gradient-circle pink-circle"
+            initial={{ opacity: 0, scale: 0.8, x: 0, y: 0 }}
+            animate={
+              motionEnabled
+                ? {
+                    opacity: [0.5, 0.7, 0.3, 0.6, 0.5],
+                    scale: [1, 1.2, 1.5, 0.9, 1],
+                    x: [0, 20, -30, 15, 0],
+                    y: [0, -25, 20, -35, 0],
+                    borderRadius: [
+                      "81% 19% 33% 67% / 72% 44% 56% 28%",
+                      "19% 81% 67% 33% / 44% 72% 28% 56%",
+                      "33% 67% 81% 19% / 56% 28% 72% 44%",
+                      "67% 33% 19% 81% / 28% 56% 44% 72%",
+                      "81% 19% 33% 67% / 72% 44% 56% 28%",
+                    ],
+                    rotate: [0, 120, -90, 75, 0],
+                  }
+                : { opacity: 0.5 }
+            }
+            transition={
+              motionEnabled
+                ? {
+                    duration: 7,
+                    ease: "easeInOut",
+                    repeat: Infinity,
+                    delay: 1.5,
+                  }
+                : { duration: 0 }
+            }
+            whileHover={
+              motionEnabled
+                ? {
+                    scale: 1.6,
+                    opacity: 0.8,
+                    transition: { duration: 0.4 },
+                  }
+                : {}
+            }
+          />
+        </div>
+      )}
 
       <div className="Header flex justify-center lg:gap-[4rem] md:gap-[2rem] gap-[1rem] relative">
         {/* used framer motion here to move the navigation design, (springy like animation) */}
@@ -374,52 +576,64 @@ export default function Home() {
       <div className="mainBody flex flex-col gap-[2rem] justify-center items-center">
         <div className="introduction flex flex-col gap-[2rem] justify-center items-center">
           <div className="flex justify-center relative">
-            <motion.div
-              className="top-star"
-              animate={topStarControls}
-              initial={{ scale: 1, rotate: 0 }}
-              onHoverStart={() => setIsTopHovering(true)}
-              onHoverEnd={() => setIsTopHovering(false)}
-            >
-              <Image
-                src="/introStar.svg"
-                alt="Decorative star"
-                width={60}
-                height={60}
-                className="star-image"
-              />
-            </motion.div>
+            {decorationsEnabled && (
+              <motion.div
+                className="top-star"
+                animate={
+                  motionEnabled ? topStarControls : { scale: 1, rotate: 0 }
+                }
+                initial={{ scale: 1, rotate: 0 }}
+                onHoverStart={() => motionEnabled && setIsTopHovering(true)}
+                onHoverEnd={() => motionEnabled && setIsTopHovering(false)}
+              >
+                <Image
+                  src="/introStar.svg"
+                  alt="Decorative star"
+                  width={60}
+                  height={60}
+                  className="star-image"
+                />
+              </motion.div>
+            )}
 
             <div className="introductionStatement text-center">
               Hi. I'm Carl. A <br />
               {currentText}
               <motion.span
-                animate={{ opacity: [1, 0] }}
-                transition={{
-                  duration: 0.8,
-                  repeat: Infinity,
-                  repeatType: "reverse",
-                }}
+                animate={motionEnabled ? { opacity: [1, 0] } : { opacity: 1 }}
+                transition={
+                  motionEnabled
+                    ? {
+                        duration: 0.8,
+                        repeat: Infinity,
+                        repeatType: "reverse",
+                      }
+                    : { duration: 0 }
+                }
               >
                 |
               </motion.span>
             </div>
 
-            <motion.div
-              className="bottom-star"
-              animate={bottomStarControls}
-              initial={{ scale: 1, rotate: 0 }}
-              onHoverStart={() => setIsBottomHovering(true)}
-              onHoverEnd={() => setIsBottomHovering(false)}
-            >
-              <Image
-                src="/introStar.svg"
-                alt="Decorative star"
-                width={60}
-                height={60}
-                className="star-image"
-              />
-            </motion.div>
+            {decorationsEnabled && (
+              <motion.div
+                className="bottom-star"
+                animate={
+                  motionEnabled ? bottomStarControls : { scale: 1, rotate: 0 }
+                }
+                initial={{ scale: 1, rotate: 0 }}
+                onHoverStart={() => motionEnabled && setIsBottomHovering(true)}
+                onHoverEnd={() => motionEnabled && setIsBottomHovering(false)}
+              >
+                <Image
+                  src="/introStar.svg"
+                  alt="Decorative star"
+                  width={60}
+                  height={60}
+                  className="star-image"
+                />
+              </motion.div>
+            )}
           </div>
           <span className="introDescription text-center">
             I'm passionate in creating modern web designs that improve user
