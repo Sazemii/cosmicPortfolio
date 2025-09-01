@@ -742,6 +742,7 @@ body {
 
 .settings-button {
   transition: all 0.3s ease;
+  background-color: transparent;
 }
 
 .settings-button:hover {
@@ -751,6 +752,7 @@ body {
 .settings-panel {
   min-width: 320px;
   max-width: 90vw;
+  padding: 1.5rem;
 }
 
 @media (max-width: 480px) {

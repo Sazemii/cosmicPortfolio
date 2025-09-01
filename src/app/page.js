@@ -329,12 +329,14 @@ export default function Home() {
       <StarField />
 
       {/* Settings Button */}
-      <button
+      <motion.button
         onClick={toggleSettings}
         className="settings-button fixed top-4 right-4 z-50 bg-[#323232] hover:bg-[#404040] text-white p-3 rounded-full transition-all duration-300 shadow-lg"
+        animate={{ rotate: isSettingsOpen ? 180 : 0 }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
       >
         <Settings size={30} />
-      </button>
+      </motion.button>
 
       {/* Settings Panel */}
       <SettingsPanel
