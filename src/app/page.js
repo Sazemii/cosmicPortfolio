@@ -97,7 +97,6 @@ export default function Home() {
     },
   ];
 
-
   const navRefs = {
     home: useRef(null),
     about: useRef(null),
@@ -332,9 +331,9 @@ export default function Home() {
       {/* Settings Button */}
       <button
         onClick={toggleSettings}
-        className="settings-button fixed top-4 left-4 z-50 bg-[#323232] hover:bg-[#404040] text-white p-3 rounded-full transition-all duration-300 shadow-lg"
+        className="settings-button fixed top-4 right-4 z-50 bg-[#323232] hover:bg-[#404040] text-white p-3 rounded-full transition-all duration-300 shadow-lg"
       >
-        <Settings size={20} />
+        <Settings size={30} />
       </button>
 
       {/* Settings Panel */}
@@ -362,7 +361,7 @@ export default function Home() {
       </div>
 
       {/* Gradient Background */}
-      <GradientBackground 
+      <GradientBackground
         decorationsEnabled={decorationsEnabled}
         motionEnabled={motionEnabled}
       />

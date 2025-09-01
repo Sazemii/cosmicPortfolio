@@ -760,6 +760,17 @@ body {
   }
 }
 
+.settings-button svg {
+  width: 25px;
+  height: 25px;
+}
+@media (max-width: 600px) {
+  .settings-button svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
 /* Toggle Switch Styles */
 .toggle-switch {
   position: relative;
