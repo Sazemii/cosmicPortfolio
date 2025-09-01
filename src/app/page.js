@@ -3,7 +3,14 @@ import { useState, useRef, useEffect } from "react";
 import { motion, useAnimationControls } from "framer-motion";
 import Image from "next/image";
 import StarField from "../components/StarField";
-import { Settings, X } from "lucide-react";
+import SettingsPanel from "../components/SettingsPanel";
+import Navigation from "../components/Navigation";
+import IntroSection from "../components/IntroSection";
+import AboutSection from "../components/AboutSection";
+import ProjectsSection from "../components/ProjectsSection";
+import TechStackSection from "../components/TechStackSection";
+import GradientBackground from "../components/GradientBackground";
+import { Settings } from "lucide-react";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("home");
@@ -90,7 +97,7 @@ export default function Home() {
     },
   ];
 
-  const currentProject = projects[activePage - 1];
+
   const navRefs = {
     home: useRef(null),
     about: useRef(null),
@@ -330,68 +337,15 @@ export default function Home() {
         <Settings size={20} />
       </button>
 
-      {/* Settings Panel with Blur Background */}
-      {isSettingsOpen && (
-        <>
-          {/* Blur Overlay */}
-          <motion.div
-            className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm z-40"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={toggleSettings}
-          />
-
-          {/* Settings Panel */}
-          <motion.div
-            className="settings-panel fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 bg-[#1a1a1a] border border-[#333] rounded-lg p-6 shadow-2xl"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-          >
-            {/* Header */}
-            <div className="flex items-center gap-3 mb-6">
-              <Settings size={24} className="text-white" />
-              <h2 className="text-xl font-semibold text-white">Settings</h2>
-            </div>
-
-            {/* Settings Options */}
-            <div className="space-y-4 mb-6">
-              {/* Decorations Toggle */}
-              <div className="flex items-center justify-between">
-                <span className="text-white text-lg">Decorations</span>
-                <button
-                  onClick={handleDecorationsToggle}
-                  className={`toggle-switch ${
-                    decorationsEnabled ? "active" : ""
-                  }`}
-                >
-                  <div className="toggle-slider"></div>
-                </button>
-              </div>
-
-              {/* Motion Toggle */}
-              <div className="flex items-center justify-between">
-                <span className="text-white text-lg">Motion</span>
-                <button
-                  onClick={handleMotionToggle}
-                  className={`toggle-switch ${motionEnabled ? "active" : ""}`}
-                >
-                  <div className="toggle-slider"></div>
-                </button>
-              </div>
-            </div>
-
-            {/* Close Button */}
-            <button
-              onClick={toggleSettings}
-              className="close-button absolute bottom-4 right-4 bg-[#323232] hover:bg-[#404040] text-white p-2 rounded-full transition-all duration-300"
-            >
-              <X size={16} />
-            </button>
-          </motion.div>
-        </>
-      )}
+      {/* Settings Panel */}
+      <SettingsPanel
+        isSettingsOpen={isSettingsOpen}
+        decorationsEnabled={decorationsEnabled}
+        motionEnabled={motionEnabled}
+        toggleSettings={toggleSettings}
+        handleDecorationsToggle={handleDecorationsToggle}
+        handleMotionToggle={handleMotionToggle}
+      />
 
       {/* Preload all project images for better performance */}
       <div style={{ display: "none" }}>
@@ -407,533 +361,42 @@ export default function Home() {
         ))}
       </div>
 
-      {decorationsEnabled && (
-        <div className="gradient-circles-container">
-          <motion.div
-            className="gradient-circle violet-circle"
-            initial={{ opacity: 0, scale: 0.8, x: 0, y: 0 }}
-            animate={
-              motionEnabled
-                ? {
-                    opacity: [0.3, 0.6, 0.4, 0.7, 0.3],
-                    scale: [1, 1.3, 0.9, 1.2, 1],
-                    x: [0, 40, -20, 30, 0],
-                    y: [0, 25, 40, -15, 0],
-                    borderRadius: [
-                      "74% 26% 47% 53% / 68% 46% 54% 32%",
-                      "26% 74% 33% 67% / 54% 68% 32% 46%",
-                      "67% 33% 74% 26% / 32% 54% 46% 68%",
-                      "33% 67% 26% 74% / 46% 32% 68% 54%",
-                      "74% 26% 47% 53% / 68% 46% 54% 32%",
-                    ],
-                    rotate: [0, 45, -30, 60, 0],
-                  }
-                : { opacity: 0.4 }
-            }
-            transition={
-              motionEnabled
-                ? {
-                    duration: 8,
-                    ease: "easeInOut",
-                    repeat: Infinity,
-                    delay: 0.2,
-                  }
-                : { duration: 0 }
-            }
-            whileHover={
-              motionEnabled
-                ? {
-                    scale: 1.4,
-                    opacity: 0.8,
-                    transition: { duration: 0.4 },
-                  }
-                : {}
-            }
-          />
+      {/* Gradient Background */}
+      <GradientBackground 
+        decorationsEnabled={decorationsEnabled}
+        motionEnabled={motionEnabled}
+      />
 
-          <motion.div
-            className="gradient-circle blue-circle"
-            initial={{ opacity: 0, scale: 0.8, x: 0, y: 0 }}
-            animate={
-              motionEnabled
-                ? {
-                    opacity: [0.4, 0.3, 0.7, 0.5, 0.4],
-                    scale: [1, 0.8, 1.4, 1.1, 1],
-                    x: [0, -35, 25, -10, 0],
-                    y: [0, 35, -20, 30, 0],
-                    borderRadius: [
-                      "63% 37% 54% 46% / 55% 48% 52% 45%",
-                      "37% 63% 46% 54% / 48% 55% 45% 52%",
-                      "54% 46% 63% 37% / 52% 45% 55% 48%",
-                      "46% 54% 37% 63% / 45% 52% 48% 55%",
-                      "63% 37% 54% 46% / 55% 48% 52% 45%",
-                    ],
-                    rotate: [0, -60, 90, -45, 0],
-                  }
-                : { opacity: 0.3 }
-            }
-            transition={
-              motionEnabled
-                ? {
-                    duration: 10,
-                    ease: "easeInOut",
-                    repeat: Infinity,
-                    delay: 0.8,
-                  }
-                : { duration: 0 }
-            }
-            whileHover={
-              motionEnabled
-                ? {
-                    scale: 1.5,
-                    opacity: 0.9,
-                    transition: { duration: 0.4 },
-                  }
-                : {}
-            }
-          />
-
-          <motion.div
-            className="gradient-circle pink-circle"
-            initial={{ opacity: 0, scale: 0.8, x: 0, y: 0 }}
-            animate={
-              motionEnabled
-                ? {
-                    opacity: [0.5, 0.7, 0.3, 0.6, 0.5],
-                    scale: [1, 1.2, 1.5, 0.9, 1],
-                    x: [0, 20, -30, 15, 0],
-                    y: [0, -25, 20, -35, 0],
-                    borderRadius: [
-                      "81% 19% 33% 67% / 72% 44% 56% 28%",
-                      "19% 81% 67% 33% / 44% 72% 28% 56%",
-                      "33% 67% 81% 19% / 56% 28% 72% 44%",
-                      "67% 33% 19% 81% / 28% 56% 44% 72%",
-                      "81% 19% 33% 67% / 72% 44% 56% 28%",
-                    ],
-                    rotate: [0, 120, -90, 75, 0],
-                  }
-                : { opacity: 0.5 }
-            }
-            transition={
-              motionEnabled
-                ? {
-                    duration: 7,
-                    ease: "easeInOut",
-                    repeat: Infinity,
-                    delay: 1.5,
-                  }
-                : { duration: 0 }
-            }
-            whileHover={
-              motionEnabled
-                ? {
-                    scale: 1.6,
-                    opacity: 0.8,
-                    transition: { duration: 0.4 },
-                  }
-                : {}
-            }
-          />
-        </div>
-      )}
-
-      <div className="Header flex justify-center lg:gap-[4rem] md:gap-[2rem] gap-[1rem] relative">
-        {/* used framer motion here to move the navigation design, (springy like animation) */}
-        <motion.div
-          className="absolute bg-[#323232] rounded-[20px]"
-          animate={indicatorStyle}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        />
-
-        <div
-          ref={navRefs.home}
-          className={`homeBar nav-item ${
-            activeTab === "home" ? "text-white" : "text-gray-300"
-          }`}
-          onClick={() => setActiveTab("home")}
-        >
-          Home
-        </div>
-        <div
-          ref={navRefs.about}
-          className={`aboutBar nav-item ${
-            activeTab === "about" ? "text-white" : "text-gray-300"
-          }`}
-          onClick={() => setActiveTab("about")}
-        >
-          About
-        </div>
-        <div
-          ref={navRefs.contact}
-          className={`contactBar nav-item  ${
-            activeTab === "contact" ? "text-white" : "text-gray-300"
-          }`}
-          onClick={() => setActiveTab("contact")}
-        >
-          Contact
-        </div>
-      </div>
+      {/* Navigation */}
+      <Navigation
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        indicatorStyle={indicatorStyle}
+        navRefs={navRefs}
+      />
       <div className="mainBody flex flex-col gap-[2rem] justify-center items-center">
-        <div className="introduction flex flex-col gap-[2rem] justify-center items-center">
-          <div className="flex justify-center relative">
-            {decorationsEnabled && (
-              <motion.div
-                className="top-star"
-                animate={
-                  motionEnabled ? topStarControls : { scale: 1, rotate: 0 }
-                }
-                initial={{ scale: 1, rotate: 0 }}
-                onHoverStart={() => motionEnabled && setIsTopHovering(true)}
-                onHoverEnd={() => motionEnabled && setIsTopHovering(false)}
-              >
-                <Image
-                  src="/introStar.svg"
-                  alt="Decorative star"
-                  width={60}
-                  height={60}
-                  className="star-image"
-                />
-              </motion.div>
-            )}
-
-            <div className="introductionStatement text-center">
-              Hi. I'm Carl. A <br />
-              {currentText}
-              <motion.span
-                animate={motionEnabled ? { opacity: [1, 0] } : { opacity: 1 }}
-                transition={
-                  motionEnabled
-                    ? {
-                        duration: 0.8,
-                        repeat: Infinity,
-                        repeatType: "reverse",
-                      }
-                    : { duration: 0 }
-                }
-              >
-                |
-              </motion.span>
-            </div>
-
-            {decorationsEnabled && (
-              <motion.div
-                className="bottom-star"
-                animate={
-                  motionEnabled ? bottomStarControls : { scale: 1, rotate: 0 }
-                }
-                initial={{ scale: 1, rotate: 0 }}
-                onHoverStart={() => motionEnabled && setIsBottomHovering(true)}
-                onHoverEnd={() => motionEnabled && setIsBottomHovering(false)}
-              >
-                <Image
-                  src="/introStar.svg"
-                  alt="Decorative star"
-                  width={60}
-                  height={60}
-                  className="star-image"
-                />
-              </motion.div>
-            )}
-          </div>
-          <span className="introDescription text-center">
-            I'm passionate in creating modern web designs that improve user
-            experience through aesthetics and motion
-          </span>
-        </div>
-        <div className="aboutBlock flex flex-col justify-center items-center">
-          <span className="aboutTitle">About me</span>
-          <span className="aboutDescription">
-            A 19 year old bloke whose hobby is to create websites. Started with
-            coding robots 3 years ago. Now focusing on using ReactJS and
-            libraries.
-          </span>
-          <div className="aboutRow flex">
-            <span className="more-btn flex">
-              More about me{" "}
-              <Image
-                src="/searchIcon.svg"
-                alt="searchIcon"
-                width={20}
-                height={20}
-                className="searchIcon"
-              />
-            </span>
-            <span className="contact-btn flex">
-              Contact me
-              <Image
-                src="/arrowRight.svg"
-                alt="arrowRight"
-                width={20}
-                height={20}
-                className="arrowRight"
-              />
-            </span>
-          </div>
-        </div>
-        <div className="projects flex flex-col flex-center items-center">
-          <div className="project-header">My Projects</div>
-          <div className="project-container flex flex-col">
-            <div className="project-title">{currentProject.name}</div>
-            <div className="project-description   ">
-              {currentProject.description}
-            </div>
-            <div className="project-photo">
-              <Image
-                src={currentProject.image}
-                alt={currentProject.name}
-                width={1000}
-                height={600}
-                className="project-img"
-                priority={true}
-                sizes="(max-width: 900px) 100vw, (max-width: 1200px) 80vw, 70vw"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                }}
-              />
-            </div>
-            <div className="tech-used flex">
-              {currentProject.tools.map((tool, index) => (
-                <div key={index} className="tech-item flex">
-                  <Image
-                    src={tool.icon}
-                    alt={tool.name}
-                    width={20}
-                    height={20}
-                    className="s-icon"
-                  />
-                  <span className="tech-title">{tool.name}</span>
-                </div>
-              ))}
-            </div>
-            <div className="pagination flex justify-center items-center gap-[.3rem]">
-              <div
-                className={`pagination-icon ${
-                  activePage === 1 ? "disabled" : ""
-                }`}
-                onClick={handlePreviousPage}
-              >
-                <Image
-                  src="/icons/previouspage.svg"
-                  alt="previous page"
-                  width={25}
-                  height={25}
-                />
-              </div>
-              {projects.map((_, index) => (
-                <span
-                  key={index + 1}
-                  className={`page-number ${
-                    activePage === index + 1 ? "active" : ""
-                  }`}
-                  onClick={() => handlePageClick(index + 1)}
-                >
-                  {index + 1}
-                </span>
-              ))}
-
-              <div
-                className={`pagination-icon ${
-                  activePage === projects.length ? "disabled" : ""
-                }`}
-                onClick={handleNextPage}
-              >
-                <Image
-                  src="/icons/nextpage.svg"
-                  alt="next page"
-                  width={25}
-                  height={25}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="tech-stack-container flex flex-col justify-center">
-          <div className="tech-stack-title">Tech Stack</div>
-          <div className="tech-stack-grid">
-            <div className="tech-card flex justify-center flex-col items-center">
-              <Image
-                src="/stack-icons/ReactJS.svg"
-                alt="React"
-                width={40}
-                height={40}
-                className="tech-stack-icon"
-              />
-              <span className="tech-stack-name">React</span>
-            </div>
-            <div className="tech-card flex justify-center flex-col items-center">
-              <Image
-                src="/stack-icons/NextJS.svg"
-                alt="Next.js"
-                width={40}
-                height={40}
-                className="tech-stack-icon"
-              />
-              <span className="tech-stack-name">Next.js</span>
-            </div>
-            <div className="tech-card flex justify-center flex-col items-center">
-              <Image
-                src="/stack-icons/Javascript.svg"
-                alt="JavaScript"
-                width={40}
-                height={40}
-                className="tech-stack-icon"
-              />
-              <span className="tech-stack-name">JavaScript</span>
-            </div>
-            <div className="tech-card flex justify-center flex-col items-center">
-              <Image
-                src="/stack-icons/css.svg"
-                alt="CSS"
-                width={40}
-                height={40}
-                className="tech-stack-icon"
-              />
-              <span className="tech-stack-name">CSS</span>
-            </div>
-            <div className="tech-card flex justify-center flex-col items-center">
-              <Image
-                src="/stack-icons/tailwind.svg"
-                alt="Tailwind CSS"
-                width={40}
-                height={40}
-                className="tech-stack-icon"
-              />
-              <span className="tech-stack-name">Tailwind</span>
-            </div>
-            <div className="tech-card flex justify-center flex-col items-center">
-              <Image
-                src="/stack-icons/NodeJS.svg"
-                alt="Node.js"
-                width={40}
-                height={40}
-                className="tech-stack-icon"
-              />
-              <span className="tech-stack-name">Node.js</span>
-            </div>
-            <div className="tech-card flex justify-center flex-col items-center">
-              <Image
-                src="/stack-icons/MongoDB.svg"
-                alt="MongoDB"
-                width={40}
-                height={40}
-                className="tech-stack-icon"
-              />
-              <span className="tech-stack-name">MongoDB</span>
-            </div>
-            <div className="tech-card flex justify-center flex-col items-center">
-              <Image
-                src="/stack-icons/PostgreSQL.svg"
-                alt="PostgreSQL"
-                width={40}
-                height={40}
-                className="tech-stack-icon"
-              />
-              <span className="tech-stack-name">PostgreSQL</span>
-            </div>
-            <div className="tech-card flex justify-center flex-col items-center">
-              <Image
-                src="/stack-icons/Git.svg"
-                alt="Git"
-                width={40}
-                height={40}
-                className="tech-stack-icon"
-              />
-              <span className="tech-stack-name">Git</span>
-            </div>
-            <div className="tech-card flex justify-center flex-col items-center">
-              <Image
-                src="/stack-icons/Github.svg"
-                alt="GitHub"
-                width={40}
-                height={40}
-                className="tech-stack-icon"
-              />
-              <span className="tech-stack-name">GitHub</span>
-            </div>
-            <div className="tech-card flex justify-center flex-col items-center">
-              <Image
-                src="/stack-icons/figma.svg"
-                alt="Figma"
-                width={40}
-                height={40}
-                className="tech-stack-icon"
-              />
-              <span className="tech-stack-name">Figma</span>
-            </div>
-            <div className="tech-card flex justify-center flex-col items-center">
-              <Image
-                src="/stack-icons/Vercel.svg"
-                alt="Vercel"
-                width={40}
-                height={40}
-                className="tech-stack-icon"
-              />
-              <span className="tech-stack-name">Vercel</span>
-            </div>
-            <div className="tech-card flex justify-center flex-col items-center">
-              <Image
-                src="/stack-icons/framer.svg"
-                alt="Framer Motion"
-                width={40}
-                height={40}
-                className="tech-stack-icon"
-              />
-              <span className="tech-stack-name">Framer</span>
-            </div>
-            <div className="tech-card flex justify-center flex-col items-center">
-              <Image
-                src="/stack-icons/GSAP.svg"
-                alt="GSAP"
-                width={40}
-                height={40}
-                className="tech-stack-icon"
-              />
-              <span className="tech-stack-name">GSAP</span>
-            </div>
-            <div className="tech-card flex justify-center flex-col items-center">
-              <Image
-                src="/stack-icons/Postman.svg"
-                alt="Postman"
-                width={40}
-                height={40}
-                className="tech-stack-icon"
-              />
-              <span className="tech-stack-name">Postman</span>
-            </div>
-            <div className="tech-card flex justify-center flex-col items-center">
-              <Image
-                src="/stack-icons/Python.svg"
-                alt="Python"
-                width={40}
-                height={40}
-                className="tech-stack-icon"
-              />
-              <span className="tech-stack-name">Python</span>
-            </div>
-            <div className="tech-card flex justify-center flex-col items-center">
-              <Image
-                src="/stack-icons/Java.svg"
-                alt="Java"
-                width={40}
-                height={40}
-                className="tech-stack-icon"
-              />
-              <span className="tech-stack-name">Java</span>
-            </div>
-            <div className="tech-card flex justify-center flex-col items-center">
-              <Image
-                src="/stack-icons/Aceternity.svg"
-                alt="Aceternity UI"
-                width={40}
-                height={40}
-                className="tech-stack-icon"
-              />
-              <span className="tech-stack-name">Aceternity</span>
-            </div>
-          </div>
-        </div>
+        {/* Introduction Section */}
+        <IntroSection
+          decorationsEnabled={decorationsEnabled}
+          motionEnabled={motionEnabled}
+          topStarControls={topStarControls}
+          bottomStarControls={bottomStarControls}
+          setIsTopHovering={setIsTopHovering}
+          setIsBottomHovering={setIsBottomHovering}
+          currentText={currentText}
+        />
+        {/* About Section */}
+        <AboutSection />
+        {/* Projects Section */}
+        <ProjectsSection
+          projects={projects}
+          activePage={activePage}
+          handlePageClick={handlePageClick}
+          handlePreviousPage={handlePreviousPage}
+          handleNextPage={handleNextPage}
+        />
+        {/* Tech Stack Section */}
+        <TechStackSection />
       </div>
     </main>
   );
