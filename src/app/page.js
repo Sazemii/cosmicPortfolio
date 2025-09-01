@@ -130,7 +130,7 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if (cycleComplete || !motionEnabled) return;
+    if (cycleComplete) return;
 
     const currentFullText = texts[textIndex];
 
@@ -163,30 +163,7 @@ export default function Home() {
         setIsTyping(true);
       }
     }
-  }, [
-    currentText,
-    isTyping,
-    isErasing,
-    textIndex,
-    cycleComplete,
-    motionEnabled,
-  ]);
-
-  // Set static text when motion is disabled
-  useEffect(() => {
-    if (!motionEnabled) {
-      setCurrentText("UI designer");
-      setIsTyping(false);
-      setIsErasing(false);
-      setCycleComplete(true);
-    } else if (motionEnabled && cycleComplete) {
-      // Reset animation when motion is re-enabled
-      setCurrentText("");
-      setTextIndex(0);
-      setCycleComplete(false);
-      setIsTyping(true);
-    }
-  }, [motionEnabled]);
+  }, [currentText, isTyping, isErasing, textIndex, cycleComplete]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -326,7 +303,7 @@ export default function Home() {
 
   return (
     <main className="">
-      <StarField />
+      <StarField motionEnabled={motionEnabled} />
 
       {/* Settings Button */}
       <motion.button

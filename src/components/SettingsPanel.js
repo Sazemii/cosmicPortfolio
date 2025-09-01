@@ -16,7 +16,7 @@ export default function SettingsPanel({
     <>
       {/* Blur Overlay */}
       <motion.div
-        style={{ backgroundColor: 'rgba(0, 0, 0, 0.05)' }}
+        style={{ backgroundColor: "rgba(0, 0, 0, 0.05)" }}
         className="fixed inset-0 backdrop-blur-sm z-40"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -46,10 +46,12 @@ export default function SettingsPanel({
         </div>
 
         {/* Settings Options */}
-        <div className="space-y-6 mb-8 pr-8">
+        <div className="space-y-6 mb-8 pr-8 flex flex-col gap-[0.33rem]">
           {/* Decorations Toggle */}
           <div className="flex items-center justify-between">
-            <span className="text-white text-base font-medium">Decorations</span>
+            <span className="text-white text-base font-medium">
+              Decorations
+            </span>
             <button
               onClick={handleDecorationsToggle}
               className={`toggle-switch ${decorationsEnabled ? "active" : ""}`}
@@ -69,8 +71,6 @@ export default function SettingsPanel({
             </button>
           </div>
         </div>
-
-
       </motion.div>
     </>
   );
