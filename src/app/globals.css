@@ -995,7 +995,7 @@ body {
 .hero-bg {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, #000000 0%, #242424 30%, #8c8c8c 120%);
+  background: linear-gradient(180deg, #000000 0%, #242424 35%, #8c8c8c 100%);
   z-index: 0;
 }
 
