@@ -5,6 +5,7 @@ import Image from "next/image";
 import StarField from "../components/StarField";
 import SettingsPanel from "../components/SettingsPanel";
 import Navigation from "../components/Navigation";
+import HeroSection from "../components/HeroSection";
 import IntroSection from "../components/IntroSection";
 import AboutSection from "../components/AboutSection";
 import ProjectsSection from "../components/ProjectsSection";
@@ -303,8 +304,11 @@ export default function Home() {
 
   return (
     <main className="">
-      <StarField motionEnabled={motionEnabled} />
+      {/* Hero Section - Full Screen Landing */}
+      <HeroSection />
 
+      {/* Background decorations for the rest of the page */}
+      <StarField motionEnabled={motionEnabled} />
       {/* Settings Button */}
       <motion.button
         onClick={toggleSettings}

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useMemo } from "react";
 
 const StarField = ({ motionEnabled = true }) => {
   const canvasRef = useRef(null);
@@ -9,12 +9,17 @@ const StarField = ({ motionEnabled = true }) => {
   const pointerRef = useRef({ x: null, y: null });
   const touchInputRef = useRef(false);
 
-  const config = {
-    STAR_COLOR: "#fff",
-    STAR_SIZE: 3,
-    STAR_MIN_SCALE: 0.2,
-    OVERFLOW_THRESHOLD: 50,
-  };
+  // Memoize config to prevent recreation
+  const config = useMemo(
+    () => ({
+      STAR_COLOR: "#fff",
+      STAR_SIZE: 3,
+      STAR_MIN_SCALE: 0.2,
+      OVERFLOW_THRESHOLD: 50,
+      MAX_STARS: 150,
+    }),
+    [],
+  );
 
   useEffect(() => {
     if (!motionEnabled) return;
@@ -22,11 +27,16 @@ const StarField = ({ motionEnabled = true }) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const context = canvas.getContext("2d");
+    const context = canvas.getContext("2d", { alpha: true });
     let scale = 1;
     let width, height;
 
-    const getStarCount = () => (window.innerWidth + window.innerHeight) / 20;
+    // Cap star count for performance
+    const getStarCount = () =>
+      Math.min(
+        Math.floor((window.innerWidth + window.innerHeight) / 20),
+        config.MAX_STARS,
+      );
 
     const generate = () => {
       starsRef.current = [];
@@ -51,16 +61,18 @@ const StarField = ({ motionEnabled = true }) => {
       let direction = "z";
       const velocity = velocityRef.current;
 
-      let vx = Math.abs(velocity.x);
-      let vy = Math.abs(velocity.y);
+      const vx = Math.abs(velocity.x);
+      const vy = Math.abs(velocity.y);
 
       if (vx > 1 || vy > 1) {
-        let axis;
-        if (vx > vy) {
-          axis = Math.random() < vx / (vx + vy) ? "h" : "v";
-        } else {
-          axis = Math.random() < vy / (vx + vy) ? "v" : "h";
-        }
+        const axis =
+          vx > vy
+            ? Math.random() < vx / (vx + vy)
+              ? "h"
+              : "v"
+            : Math.random() < vy / (vx + vy)
+              ? "v"
+              : "h";
 
         if (axis === "h") {
           direction = velocity.x > 0 ? "l" : "r";
@@ -91,59 +103,71 @@ const StarField = ({ motionEnabled = true }) => {
       }
     };
 
+    // Debounced resize
+    let resizeTimeout;
     const resize = () => {
-      scale = window.devicePixelRatio || 1;
-      width = window.innerWidth * scale;
-      height = window.innerHeight * scale;
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        scale = window.devicePixelRatio || 1;
+        width = window.innerWidth * scale;
+        height = window.innerHeight * scale;
 
-      canvas.width = width;
-      canvas.height = height;
-      canvas.style.width = window.innerWidth + "px";
-      canvas.style.height = window.innerHeight + "px";
+        canvas.width = width;
+        canvas.height = height;
+        canvas.style.width = window.innerWidth + "px";
+        canvas.style.height = window.innerHeight + "px";
 
-      starsRef.current.forEach(placeStar);
+        starsRef.current.forEach(placeStar);
+      }, 100);
     };
 
     const update = () => {
       const velocity = velocityRef.current;
+      const stars = starsRef.current;
+      const threshold = config.OVERFLOW_THRESHOLD;
 
       velocity.tx *= 0.96;
       velocity.ty *= 0.96;
-
       velocity.x += (velocity.tx - velocity.x) * 0.8;
       velocity.y += (velocity.ty - velocity.y) * 0.8;
 
-      starsRef.current.forEach((star) => {
+      const halfWidth = width / 2;
+      const halfHeight = height / 2;
+
+      for (let i = 0, len = stars.length; i < len; i++) {
+        const star = stars[i];
         star.x += velocity.x * star.z;
         star.y += velocity.y * star.z;
-
-        star.x += (star.x - width / 2) * velocity.z * star.z;
-        star.y += (star.y - height / 2) * velocity.z * star.z;
+        star.x += (star.x - halfWidth) * velocity.z * star.z;
+        star.y += (star.y - halfHeight) * velocity.z * star.z;
         star.z += velocity.z;
 
         if (
-          star.x < -config.OVERFLOW_THRESHOLD ||
-          star.x > width + config.OVERFLOW_THRESHOLD ||
-          star.y < -config.OVERFLOW_THRESHOLD ||
-          star.y > height + config.OVERFLOW_THRESHOLD
+          star.x < -threshold ||
+          star.x > width + threshold ||
+          star.y < -threshold ||
+          star.y > height + threshold
         ) {
           recycleStar(star);
         }
-      });
+      }
     };
 
     const render = () => {
-      context.clearRect(0, 0, width, height);
+      const stars = starsRef.current;
       const velocity = velocityRef.current;
 
-      starsRef.current.forEach((star) => {
+      context.clearRect(0, 0, width, height);
+      context.strokeStyle = config.STAR_COLOR;
+      context.lineCap = "round";
+
+      // Batch similar operations
+      for (let i = 0, len = stars.length; i < len; i++) {
+        const star = stars[i];
+
         context.beginPath();
-        context.lineCap = "round";
         context.lineWidth = config.STAR_SIZE * star.z * scale;
         context.globalAlpha = 0.15 + 0.25 * Math.random();
-        context.strokeStyle = config.STAR_COLOR;
-
-        context.moveTo(star.x, star.y);
 
         let tailX = velocity.x * 2;
         let tailY = velocity.y * 2;
@@ -151,9 +175,10 @@ const StarField = ({ motionEnabled = true }) => {
         if (Math.abs(tailX) < 0.1) tailX = 0.5;
         if (Math.abs(tailY) < 0.1) tailY = 0.5;
 
+        context.moveTo(star.x, star.y);
         context.lineTo(star.x + tailX, star.y + tailY);
         context.stroke();
-      });
+      }
     };
 
     const step = () => {
@@ -162,41 +187,35 @@ const StarField = ({ motionEnabled = true }) => {
       animationRef.current = requestAnimationFrame(step);
     };
 
+    // ...existing code for movePointer, onMouseMove, onScroll, onTouchMove, onMouseLeave...
+
     const movePointer = (x, y, horizontalOnly = false) => {
       const pointer = pointerRef.current;
       const velocity = velocityRef.current;
 
       if (typeof pointer.x === "number") {
-        let ox = x - pointer.x;
-
-        velocity.tx =
-          velocity.tx + (ox / 16) * scale * (touchInputRef.current ? 1 : -1);
+        const ox = x - pointer.x;
+        velocity.tx += (ox / 16) * scale * (touchInputRef.current ? 1 : -1);
 
         if (!horizontalOnly && typeof pointer.y === "number") {
-          let oy = y - pointer.y;
-          velocity.ty =
-            velocity.ty + (oy / 8) * scale * (touchInputRef.current ? 1 : -1);
+          const oy = y - pointer.y;
+          velocity.ty += (oy / 8) * scale * (touchInputRef.current ? 1 : -1);
         }
       }
 
       pointer.x = x;
-      if (!horizontalOnly) {
-        pointer.y = y;
-      }
+      if (!horizontalOnly) pointer.y = y;
     };
 
     const onMouseMove = (event) => {
       touchInputRef.current = false;
-
       movePointer(event.clientX, pointerRef.current.y || event.clientY, true);
     };
 
     const onScroll = () => {
       const scrollY = window.scrollY;
       if (pointerRef.current.scrollY !== undefined) {
-        const deltaY = scrollY - pointerRef.current.scrollY;
-        const velocity = velocityRef.current;
-        velocity.ty += deltaY * 0.15;
+        velocityRef.current.ty += (scrollY - pointerRef.current.scrollY) * 0.15;
       }
       pointerRef.current.scrollY = scrollY;
     };
@@ -213,20 +232,28 @@ const StarField = ({ motionEnabled = true }) => {
     };
 
     generate();
-    resize();
+    // Immediate resize on init
+    scale = window.devicePixelRatio || 1;
+    width = window.innerWidth * scale;
+    height = window.innerHeight * scale;
+    canvas.width = width;
+    canvas.height = height;
+    canvas.style.width = window.innerWidth + "px";
+    canvas.style.height = window.innerHeight + "px";
+    starsRef.current.forEach(placeStar);
+
     step();
 
-    window.addEventListener("resize", resize);
-    document.addEventListener("mousemove", onMouseMove);
-    document.addEventListener("scroll", onScroll);
-    canvas.addEventListener("touchmove", onTouchMove);
-    canvas.addEventListener("touchend", onMouseLeave);
-    document.addEventListener("mouseleave", onMouseLeave);
+    window.addEventListener("resize", resize, { passive: true });
+    document.addEventListener("mousemove", onMouseMove, { passive: true });
+    document.addEventListener("scroll", onScroll, { passive: true });
+    canvas.addEventListener("touchmove", onTouchMove, { passive: false });
+    canvas.addEventListener("touchend", onMouseLeave, { passive: true });
+    document.addEventListener("mouseleave", onMouseLeave, { passive: true });
 
     return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
+      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+      clearTimeout(resizeTimeout);
       window.removeEventListener("resize", resize);
       document.removeEventListener("mousemove", onMouseMove);
       document.removeEventListener("scroll", onScroll);
@@ -234,20 +261,15 @@ const StarField = ({ motionEnabled = true }) => {
       canvas.removeEventListener("touchend", onMouseLeave);
       document.removeEventListener("mouseleave", onMouseLeave);
     };
-  }, [motionEnabled]);
+  }, [motionEnabled, config]);
 
-  // Don't render anything if motion is disabled
-  if (!motionEnabled) {
-    return null;
-  }
+  if (!motionEnabled) return null;
 
   return (
     <canvas
       ref={canvasRef}
       className="fixed inset-0 w-full h-full pointer-events-none"
-      style={{
-        zIndex: -10,
-      }}
+      style={{ zIndex: -10 }}
     />
   );
 };
