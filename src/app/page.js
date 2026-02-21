@@ -4,7 +4,6 @@ import { motion, useAnimationControls } from "framer-motion";
 import Image from "next/image";
 import StarField from "../components/StarField";
 import SettingsPanel from "../components/SettingsPanel";
-import Navigation from "../components/Navigation";
 import HeroSection from "../components/HeroSection";
 import IntroSection from "../components/IntroSection";
 import AboutSection from "../components/AboutSection";
@@ -305,14 +304,19 @@ export default function Home() {
   return (
     <main className="">
       {/* Hero Section - Full Screen Landing */}
-      <HeroSection />
+      <HeroSection
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        indicatorStyle={indicatorStyle}
+        navRefs={navRefs}
+      />
 
       {/* Background decorations for the rest of the page */}
       <StarField motionEnabled={motionEnabled} />
       {/* Settings Button */}
       <motion.button
         onClick={toggleSettings}
-        className="settings-button fixed top-4 right-4 z-50 bg-[#323232] hover:bg-[#404040] text-white p-3 rounded-full transition-all duration-300 shadow-lg"
+        className="settings-button fixed top-7 right-6 z-50 bg-[#323232] hover:bg-[#404040] text-white p-3 rounded-full transition-all duration-300 shadow-lg"
         animate={{ rotate: isSettingsOpen ? 180 : 0 }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
       >
@@ -347,14 +351,6 @@ export default function Home() {
       <GradientBackground
         decorationsEnabled={decorationsEnabled}
         motionEnabled={motionEnabled}
-      />
-
-      {/* Navigation */}
-      <Navigation
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        indicatorStyle={indicatorStyle}
-        navRefs={navRefs}
       />
       <div className="mainBody flex flex-col gap-[2rem] justify-center items-center">
         {/* Introduction Section */}
