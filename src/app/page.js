@@ -1,15 +1,23 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
-import { motion, useAnimationControls } from "framer-motion";
+import {
+  motion,
+  useAnimationControls,
+  useInView,
+  AnimatePresence,
+} from "framer-motion";
 import Image from "next/image";
 import StarField from "../components/StarField";
 import SettingsPanel from "../components/SettingsPanel";
 import HeroSection from "../components/HeroSection";
+import Navigation from "../components/Navigation";
 import IntroSection from "../components/IntroSection";
-import AboutSection from "../components/AboutSection";
-import ProjectsSection from "../components/ProjectsSection";
-import TechStackSection from "../components/TechStackSection";
 import GradientBackground from "../components/GradientBackground";
+import PageTransition from "../components/PageTransition";
+import AboutPage from "../components/AboutPage";
+import ContactPage from "../components/ContactPage";
+import LoadingScreen from "../components/LoadingScreen";
+
 import { Settings } from "lucide-react";
 
 export default function Home() {
@@ -30,72 +38,18 @@ export default function Home() {
   const [cycleComplete, setCycleComplete] = useState(false);
   const [initialAnimationComplete, setInitialAnimationComplete] =
     useState(false);
+  const [isNavVisible, setIsNavVisible] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [showLoader, setShowLoader] = useState(true);
 
-  const texts = ["UI designer", "frontend developer"];
+  const introRef = useRef(null);
+  const heroOverlayRef = useRef(null);
+  const introShadowRef = useRef(null);
+  const lastScrollYRef = useRef(0);
+  const previousTabRef = useRef(activeTab);
+  const introInView = useInView(introRef, { amount: 0.8 });
 
-  const projects = [
-    {
-      id: 1,
-      name: "GAPP",
-      description:
-        "A game searcher app. This is my first ever project after escaping the tutorial hell and the simple projects such as to-do list, calculators, etc. It is built using vanilla JS where I learned DOM manipulation and fetching request from APIs.",
-      image: "/projects/GAPP.svg",
-      tools: [
-        { name: "Javascript", icon: "/icons/js-icon.svg" },
-        { name: "CSS", icon: "/icons/css-icon.svg" },
-        { name: "HTML", icon: "/icons/html-icon.svg" },
-      ],
-    },
-    {
-      id: 2,
-      name: "Fintech Mockup",
-      description:
-        "Made this to experiment with the visuals that ChartJS can bring. This is also my first react project, could be improved by adding excel exports options. Overall, just a simple project for data visualization.",
-      image: "/projects/Fintech.svg",
-      tools: [
-        { name: "React", icon: "/icons/react-icon.svg" },
-        { name: "CSS", icon: "/icons/css-icon.svg" },
-      ],
-    },
-    {
-      id: 3,
-      name: "Panakbo",
-      description:
-        "Being a fan of sneakers, I made this purely for demonstration and aesthetics. First time I've incorporated some motion using vanilla css. Most importantly, I learned how to make projects responsive which is so time-consuming, but worth it.",
-      image: "/projects/Panakbo.svg",
-      tools: [
-        { name: "NextJS", icon: "/icons/nextjs-icon.svg" },
-        { name: "React", icon: "/icons/react-icon.svg" },
-        { name: "CSS", icon: "/icons/css-icon.svg" },
-      ],
-    },
-    {
-      id: 4,
-      name: "TalaCheck",
-      description:
-        "A school project proposal about fake news. Used OCR technology then interpret the data obtained using NLP word comparison and Hugging Face AI verdict. Also had fun making the pop-ups and scroll-based animations.",
-      image: "/projects/TalaCheck.svg",
-      tools: [
-        { name: "NextJS", icon: "/icons/nextjs-icon.svg" },
-        { name: "React", icon: "/icons/react-icon.svg" },
-        { name: "CSS", icon: "/icons/css-icon.svg" },
-        { name: "Tailwind", icon: "/icons/tailwind-icon.svg" },
-      ],
-    },
-    {
-      id: 5,
-      name: "Color Haven",
-      description:
-        "I really like experimenting with color schemes. With this, I made an app that let you see whether the palette you chose is visually appealing by making realtime changes on the elements and SVGs in the site.",
-      image: "/projects/ColorHaven.svg",
-      tools: [
-        { name: "NextJS", icon: "/icons/nextjs-icon.svg" },
-        { name: "React", icon: "/icons/react-icon.svg" },
-        { name: "CSS", icon: "/icons/css-icon.svg" },
-        { name: "Tailwind", icon: "/icons/tailwind-icon.svg" },
-      ],
-    },
-  ];
+  const texts = ["Fullstack Dev", "UI Designer"];
 
   const navRefs = {
     home: useRef(null),
@@ -165,12 +119,32 @@ export default function Home() {
     }
   }, [currentText, isTyping, isErasing, textIndex, cycleComplete]);
 
+  // Reset typewriter when switching back to home tab
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsTyping(true);
-    }, 500);
-    return () => clearTimeout(timer);
-  }, []);
+    if (activeTab === "home" && previousTabRef.current !== "home") {
+      setCurrentText("");
+      setIsTyping(false);
+      setIsErasing(false);
+      setTextIndex(0);
+      setCycleComplete(false);
+      // Start typing after a short delay when switching to home
+      const timer = setTimeout(() => {
+        setIsTyping(true);
+      }, 800); // Delay to allow transition to complete
+      previousTabRef.current = activeTab;
+      return () => clearTimeout(timer);
+    }
+    previousTabRef.current = activeTab;
+  }, [activeTab]);
+
+  useEffect(() => {
+    if (introInView && !isTyping && !cycleComplete && currentText === "") {
+      const timer = setTimeout(() => {
+        setIsTyping(true);
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [introInView, isTyping, cycleComplete, currentText]);
 
   useEffect(() => {
     updateIndicatorPosition();
@@ -179,6 +153,54 @@ export default function Home() {
       window.removeEventListener("resize", updateIndicatorPosition);
     };
   }, [activeTab]);
+
+  // Scroll handler: nav visibility + hero fade + intro shadow
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      const vh = window.innerHeight;
+
+      // --- Nav visibility ---
+      if (currentScrollY < 10) {
+        setIsNavVisible(true);
+      } else if (currentScrollY > lastScrollYRef.current) {
+        setIsNavVisible(false);
+      } else {
+        setIsNavVisible(true);
+      }
+
+      // --- Hero fade to black as it scrolls away ---
+      if (heroOverlayRef.current) {
+        const fadeProgress = Math.min(currentScrollY / vh, 1);
+        const easedOpacity = fadeProgress * fadeProgress * 0.7;
+        heroOverlayRef.current.style.opacity = easedOpacity;
+      }
+
+      // --- IntroSection shadow during peel reveal ---
+      if (introShadowRef.current) {
+        const peelProgress = Math.min(currentScrollY / vh, 1.5);
+        let shadowOpacity;
+        if (peelProgress < 0.35) {
+          // Shadow builds as hero starts peeling
+          shadowOpacity = (peelProgress / 0.35) * 0.5;
+        } else if (peelProgress < 1.2) {
+          // Shadow fades as intro is fully revealed
+          shadowOpacity = 0.5 * (1 - (peelProgress - 0.35) / 0.85);
+        } else {
+          shadowOpacity = 0;
+        }
+        introShadowRef.current.style.opacity = Math.max(0, shadowOpacity);
+      }
+
+      lastScrollYRef.current = currentScrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   const handleStarAnimation = (controls, animRef) => {
     if (!animRef.current.isAnimating) {
@@ -201,24 +223,6 @@ export default function Home() {
             handleStarAnimation(controls, animRef);
           }
         });
-    }
-  };
-
-  const handlePageClick = (pageNumber) => {
-    if (pageNumber >= 1 && pageNumber <= projects.length) {
-      setActivePage(pageNumber);
-    }
-  };
-
-  const handlePreviousPage = () => {
-    if (activePage > 1) {
-      setActivePage(activePage - 1);
-    }
-  };
-
-  const handleNextPage = () => {
-    if (activePage < projects.length) {
-      setActivePage(activePage + 1);
     }
   };
 
@@ -266,9 +270,14 @@ export default function Home() {
     }
   }, [isBottomHovering]);
 
-  // Initial spin animation on first render
+  // Initial spin animation when intro comes into view
   useEffect(() => {
-    if (!initialAnimationComplete && motionEnabled && decorationsEnabled) {
+    if (
+      !initialAnimationComplete &&
+      motionEnabled &&
+      decorationsEnabled &&
+      introInView
+    ) {
       const performInitialAnimation = async () => {
         // First spin the top star
         await topStarControls.start({
@@ -297,22 +306,43 @@ export default function Home() {
     motionEnabled,
     decorationsEnabled,
     initialAnimationComplete,
+    introInView,
     topStarControls,
     bottomStarControls,
   ]);
 
+  const handleLoadingComplete = () => {
+    // Allow hero / main content to start animating immediately
+    setIsLoading(false);
+    // Keep the loader visible just long enough to play its exit animation
+    setTimeout(() => setShowLoader(false), 800); // matches LoadingScreen exit duration
+  };
+
   return (
     <main className="">
-      {/* Hero Section - Full Screen Landing */}
-      <HeroSection
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        indicatorStyle={indicatorStyle}
-        navRefs={navRefs}
-      />
+      {/* Loading Screen */}
+      {showLoader && <LoadingScreen onComplete={handleLoadingComplete} />}
 
-      {/* Background decorations for the rest of the page */}
-      <StarField motionEnabled={motionEnabled} />
+      {/* Navigation — rendered at top level so it's not trapped in hero's stacking context */}
+      <AnimatePresence>
+        {isNavVisible && (
+          <motion.div
+            className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-4"
+            initial={{ y: -100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -100, opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+          >
+            <Navigation
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+              indicatorStyle={indicatorStyle}
+              navRefs={navRefs}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Settings Button */}
       <motion.button
         onClick={toggleSettings}
@@ -333,49 +363,59 @@ export default function Home() {
         handleMotionToggle={handleMotionToggle}
       />
 
-      {/* Preload all project images for better performance */}
-      <div style={{ display: "none" }}>
-        {projects.map((project) => (
-          <Image
-            key={`preload-${project.id}`}
-            src={project.image}
-            alt=""
-            width={800}
-            height={450}
-            priority={project.id <= 2}
-          />
-        ))}
-      </div>
+      {/* Page Transition Wrapper */}
+      <PageTransition activeTab={activeTab}>
+        {(displayedTab) => (
+          <>
+            {displayedTab === "home" && (
+              <>
+                {/* IntroSection — fixed layer behind everything, revealed by hero peel */}
+                <div className="intro-fixed-layer" ref={introRef}>
+                  {/* Shadow overlay — darkens during peel, fades when revealed */}
+                  <div ref={introShadowRef} className="intro-shadow-overlay" />
+                  {/* Grey-to-white gradient at top edge (paper underside effect) */}
 
-      {/* Gradient Background */}
-      <GradientBackground
-        decorationsEnabled={decorationsEnabled}
-        motionEnabled={motionEnabled}
-      />
-      <div className="mainBody flex flex-col gap-[2rem] justify-center items-center">
-        {/* Introduction Section */}
-        <IntroSection
-          decorationsEnabled={decorationsEnabled}
-          motionEnabled={motionEnabled}
-          topStarControls={topStarControls}
-          bottomStarControls={bottomStarControls}
-          setIsTopHovering={setIsTopHovering}
-          setIsBottomHovering={setIsBottomHovering}
-          currentText={currentText}
-        />
-        {/* About Section */}
-        <AboutSection />
-        {/* Projects Section */}
-        <ProjectsSection
-          projects={projects}
-          activePage={activePage}
-          handlePageClick={handlePageClick}
-          handlePreviousPage={handlePreviousPage}
-          handleNextPage={handleNextPage}
-        />
-        {/* Tech Stack Section */}
-        <TechStackSection />
-      </div>
+                  <StarField motionEnabled={motionEnabled} />
+
+                  <div style={{ position: "relative" }}>
+                    <GradientBackground
+                      decorationsEnabled={decorationsEnabled}
+                      motionEnabled={motionEnabled}
+                    />
+                    <IntroSection
+                      decorationsEnabled={decorationsEnabled}
+                      motionEnabled={motionEnabled}
+                      topStarControls={topStarControls}
+                      bottomStarControls={bottomStarControls}
+                      setIsTopHovering={setIsTopHovering}
+                      setIsBottomHovering={setIsBottomHovering}
+                      currentText={currentText}
+                      introInView={introInView}
+                      isHomeTab={displayedTab === "home"}
+                    />
+                  </div>
+                </div>
+
+                {/* Hero Section — scrolls normally with curved bottom peel edge */}
+                <div className="">
+                  <HeroSection
+                    heroOverlayRef={heroOverlayRef}
+                    isLoading={isLoading}
+                  />
+                </div>
+
+                {/* Spacer — accounts for the fixed intro layer */}
+                <div className="intro-spacer" />
+
+                {/* <div className="mainBody flex flex-col gap-[2rem] justify-center items-center"></div> */}
+              </>
+            )}
+
+            {displayedTab === "about" && <AboutPage />}
+            {displayedTab === "contact" && <ContactPage />}
+          </>
+        )}
+      </PageTransition>
     </main>
   );
 }

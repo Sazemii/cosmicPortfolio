@@ -109,13 +109,16 @@ const StarField = ({ motionEnabled = true }) => {
       clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(() => {
         scale = window.devicePixelRatio || 1;
-        width = window.innerWidth * scale;
-        height = window.innerHeight * scale;
+        const parent = canvas.parentElement;
+        const pw = parent ? parent.scrollWidth : window.innerWidth;
+        const ph = parent ? parent.scrollHeight : window.innerHeight;
+        width = pw * scale;
+        height = ph * scale;
 
         canvas.width = width;
         canvas.height = height;
-        canvas.style.width = window.innerWidth + "px";
-        canvas.style.height = window.innerHeight + "px";
+        canvas.style.width = pw + "px";
+        canvas.style.height = ph + "px";
 
         starsRef.current.forEach(placeStar);
       }, 100);
@@ -234,12 +237,15 @@ const StarField = ({ motionEnabled = true }) => {
     generate();
     // Immediate resize on init
     scale = window.devicePixelRatio || 1;
-    width = window.innerWidth * scale;
-    height = window.innerHeight * scale;
+    const parent = canvas.parentElement;
+    const pw = parent ? parent.scrollWidth : window.innerWidth;
+    const ph = parent ? parent.scrollHeight : window.innerHeight;
+    width = pw * scale;
+    height = ph * scale;
     canvas.width = width;
     canvas.height = height;
-    canvas.style.width = window.innerWidth + "px";
-    canvas.style.height = window.innerHeight + "px";
+    canvas.style.width = pw + "px";
+    canvas.style.height = ph + "px";
     starsRef.current.forEach(placeStar);
 
     step();
@@ -268,8 +274,8 @@ const StarField = ({ motionEnabled = true }) => {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 w-full h-full pointer-events-none"
-      style={{ zIndex: -10 }}
+      className="absolute top-0 left-0 w-full h-full pointer-events-none"
+      style={{ zIndex: 0 }}
     />
   );
 };

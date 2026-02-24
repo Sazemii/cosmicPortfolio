@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(tail:*)",
+      "mcp__ide__getDiagnostics",
+      "Bash(head:*)",
+      "WebFetch(domain:dennissnellenberg.com)",
+      "WebFetch(domain:www.shadcn.io)",
+      "WebSearch",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:www.dylanbrouwer.design)",
+      "Bash(npx next build:*)"
+    ]
+  }
+}

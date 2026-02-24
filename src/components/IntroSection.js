@@ -1,5 +1,6 @@
 "use client";
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
 import Image from "next/image";
 
 export default function IntroSection({
@@ -10,10 +11,22 @@ export default function IntroSection({
   setIsTopHovering,
   setIsBottomHovering,
   currentText,
+  introInView,
+  isHomeTab,
 }) {
+  const fadeUp = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } },
+  };
+
   return (
     <div className="introduction flex flex-col gap-[2rem] justify-center items-center">
-      <div className="flex justify-center relative">
+      <motion.div
+        className="flex justify-center relative"
+        variants={fadeUp}
+        initial="hidden"
+        animate={introInView || isHomeTab ? "visible" : "hidden"}
+      >
         {decorationsEnabled && (
           <motion.div
             className="top-star"
@@ -72,11 +85,17 @@ export default function IntroSection({
             />
           </motion.div>
         )}
-      </div>
-      <span className="introDescription text-center">
+      </motion.div>
+      <motion.span
+        className="introDescription text-center"
+        variants={fadeUp}
+        initial="hidden"
+        animate={introInView || isHomeTab ? "visible" : "hidden"}
+        transition={{ delay: 0.2 }}
+      >
         I'm passionate in creating modern web designs that improve user
         experience through aesthetics and motion
-      </span>
+      </motion.span>
     </div>
   );
 }

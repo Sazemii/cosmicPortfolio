@@ -92,8 +92,12 @@ body {
 }
 
 .mainBody {
+  position: relative;
+  z-index: 2;
+  background: #121212;
   padding-top: 5rem;
   gap: clamp(1.5rem, 3vw, 2rem);
+  overflow: hidden;
 
   @media (max-width: 600px) {
     gap: 3rem;
@@ -206,107 +210,72 @@ body {
   }
 }
 
-.aboutBlock {
-  padding-top: 1rem;
-}
+/* ===== PEEL REVEAL EFFECT ===== */
 
-.aboutDescription {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 1rem;
-  max-width: 70%;
-  text-align: center;
-
-  @media (max-width: 500px) {
-    max-width: 80%;
-    font-size: 0.8rem;
-  }
-}
-
-.aboutTitle {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 2.2rem;
-  font-weight: 700;
-  text-align: center;
-
-  @media (max-width: 500px) {
-    font-size: 1.8rem;
-  }
-
-  @media (max-width: 500px) {
-    font-size: 1.4rem;
-  }
-}
-
-.aboutRow {
-  font-size: clamp(0.75rem, 1.2vw, 0.9rem);
-  font-weight: 500;
+/* Fixed IntroSection layer — pinned behind hero, revealed as hero scrolls */
+.intro-fixed-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  min-height: 100vh;
+  background: #121212;
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  gap: 0.75rem;
-  margin-top: 0.5rem;
-}
-
-.more-btn,
-.contact-btn {
-  padding: clamp(0.3rem, 0.8vw, 0.4rem) clamp(0.5rem, 1vw, 0.7rem);
-  border-radius: 15px;
-  color: white;
-  display: flex;
   align-items: center;
-  gap: 0.3rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-
-  @media (max-width: 480px) {
-    gap: 0rem;
-  }
+  gap: 2rem;
+  overflow: hidden;
 }
 
-.more-btn {
-  background-color: #2d69ff;
+/* Shadow overlay on IntroSection — simulates shadow cast by peeling hero */
+.intro-shadow-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 10;
+  pointer-events: none;
+  opacity: 0;
 }
 
-.contact-btn {
-  background-color: #424242;
+/* Grey-to-white gradient at top of IntroSection (paper underside glow) */
+.intro-top-gradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 20%;
+  background: linear-gradient(
+    to bottom,
+    rgba(180, 180, 180, 0.15) 0%,
+    rgba(120, 120, 120, 0.06) 40%,
+    transparent 100%
+  );
+  z-index: 5;
+  pointer-events: none;
 }
 
-.more-btn:hover {
-  background-color: #1e54d5;
-  transform: translateY(-2px);
+/* Hero peel container — wraps hero, applies curved bottom clip */
+.hero-peel-container {
+  position: relative;
+  z-index: 3;
+  clip-path: url(#hero-curve);
 }
 
-.contact-btn:hover {
-  background-color: #333333;
-  transform: translateY(-2px);
-}
-
-.searchIcon,
-.arrowRight {
-  margin-left: 0.25rem;
-}
-
-@media (max-width: 480px) {
-  .aboutRow {
-    flex-direction: row;
-    align-items: center;
-    gap: 0.75rem;
-    white-space: nowrap;
-  }
-
-  .more-btn,
-  .contact-btn {
-    justify-content: center;
-  }
+/* Spacer to account for the fixed intro (doesn't take flow space) */
+.intro-spacer {
+  height: 100vh;
 }
 
 /* Animated Gradient Circles */
 .gradient-circles-container {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 5rem;
+  left: -20rem;
   width: 320px;
   height: 200px;
-  z-index: -1;
+  z-index: 1;
   pointer-events: auto;
 }
 
@@ -361,7 +330,7 @@ body {
     width: 260px;
     height: 160px;
     top: 0;
-    left: 0;
+    left: -12rem;
   }
 
   .gradient-circle {
@@ -386,10 +355,10 @@ body {
 
 @media (max-width: 768px) {
   .gradient-circles-container {
-    width: 200px;
-    height: 120px;
+    width: 150px;
+    height: 80px;
     top: 0;
-    left: 0;
+    left: -2rem;
   }
 
   .gradient-circle {
@@ -442,8 +411,10 @@ body {
 
 @media (max-width: 320px) {
   .gradient-circles-container {
-    width: 100px;
-    height: 60px;
+    width: 80px;
+    height: 40px;
+    left: -3rem;
+    top: -2rem;
   }
 
   .gradient-circle {
@@ -463,279 +434,6 @@ body {
   .pink-circle {
     top: -12px;
     left: 5px;
-  }
-}
-
-.project-header {
-  font-size: 2rem;
-}
-
-@media (max-width: 768px) {
-  .project-header {
-    font-size: 1.7rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .project-header {
-    font-size: 1.4rem;
-  }
-}
-
-.project-container {
-  max-width: 70%;
-  gap: 0.3rem;
-  min-height: 600px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-@media (max-width: 768px) {
-  .project-container {
-    max-width: 80%;
-    gap: 0.5rem;
-    min-height: 500px;
-  }
-}
-
-@media (max-width: 480px) {
-  .project-container {
-    max-width: 90%;
-    min-height: 400px;
-  }
-}
-
-.project-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  letter-spacing: 0.13rem;
-}
-
-@media (max-width: 768px) {
-  .project-title {
-    font-size: 1.3rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .project-title {
-    font-size: 1.1rem;
-  }
-}
-
-.project-description {
-  font-size: 0.9rem;
-  color: rgb(189, 189, 189);
-  min-height: 4.5em;
-  line-height: 1.5;
-  display: flex;
-  align-items: flex-start;
-}
-
-@media (max-width: 768px) {
-  .project-description {
-    font-size: 0.9rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .project-description {
-    font-size: 0.8rem;
-  }
-}
-
-.project-photo {
-  align-self: center;
-  width: 100%;
-  max-width: 900px;
-  aspect-ratio: 16/9;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.project-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 8px;
-}
-
-.tech-used {
-  display: flex;
-  gap: 0.7rem;
-}
-
-@media (max-width: 640px) {
-  .tech-used {
-    gap: 0.5rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .tech-used {
-    gap: 0.4rem;
-  }
-}
-
-.tech-item {
-  gap: 0.3rem;
-  border: 1px solid white;
-  border-radius: 10px;
-  min-width: 80px;
-  padding: 0.2rem 0.5rem;
-  display: flex;
-  align-items: center;
-}
-
-@media (max-width: 640px) {
-  .tech-item {
-    min-width: 70px;
-    padding: 0.15rem 0.4rem;
-    gap: 0.2rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .tech-item {
-    min-width: 65px;
-    padding: 0.1rem 0.3rem;
-    gap: 0.15rem;
-  }
-}
-
-.tech-title {
-  font-size: 0.8rem;
-  font-weight: 300;
-}
-
-@media (max-width: 640px) {
-  .tech-title {
-    font-size: 0.75rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .tech-title {
-    font-size: 0.7rem;
-  }
-}
-
-.s-icon {
-  width: 0.9rem;
-  height: 0.9rem;
-}
-
-@media (max-width: 640px) {
-  .s-icon {
-    width: 0.8rem;
-    height: 0.8rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .s-icon {
-    width: 0.7rem;
-    height: 0.7rem;
-  }
-}
-
-.pagination {
-  gap: clamp(0.2rem, 1vw, 0.3rem);
-}
-
-.pagination-icon {
-  border-radius: 3px;
-  padding: clamp(0.15rem, 0.5vw, 0.2rem);
-  background-color: #39393a;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.pagination-icon img {
-  width: clamp(18px, 4vw, 28px);
-  height: clamp(18px, 4vw, 28px);
-}
-
-.pagination-icon:hover:not(.disabled) {
-  background-color: #2a2a2b;
-}
-
-.pagination-icon.disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-}
-
-.page-number {
-  padding: clamp(0.15rem, 0.5vw, 0.2rem) clamp(0.5rem, 1.5vw, 0.6rem);
-  background-color: #39393a;
-  font-size: clamp(0.8rem, 2vw, 0.9rem);
-  border-radius: 3px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  border: 1px solid transparent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: clamp(1.8rem, 4vw, 2.2rem);
-  min-height: clamp(1.8rem, 4vw, 2.2rem);
-  font-weight: 700;
-}
-
-.page-number:hover {
-  background-color: #2a2a2b;
-}
-
-.page-number.active {
-  border: 2px solid #a16ae4;
-  color: #a16ae4;
-}
-
-@media (max-width: 640px) {
-  .pagination {
-    gap: 0.2rem;
-  }
-
-  .pagination-icon {
-    padding: 0.12rem;
-  }
-
-  .pagination-icon img {
-    width: 20px;
-    height: 20px;
-  }
-
-  .page-number {
-    padding: 0.12rem 0.4rem;
-    font-size: 0.75rem;
-    min-width: 1.6rem;
-    min-height: 1.6rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .pagination {
-    gap: 0.15rem;
-  }
-
-  .pagination-icon {
-    padding: 0.1rem;
-  }
-
-  .pagination-icon img {
-    width: 18px;
-    height: 18px;
-  }
-
-  .page-number {
-    padding: 0.1rem 0.35rem;
-    font-size: 0.7rem;
-    min-width: 1.4rem;
-    min-height: 1.4rem;
   }
 }
 
@@ -989,18 +687,18 @@ body {
 
 .hero-section {
   position: relative;
+  z-index: 1;
   min-height: 100vh;
   width: 100%;
   display: flex;
   justify-content: center;
-  overflow-x: clip;
-  overflow-y: visible;
+  overflow: hidden;
 }
 
 .hero-bg {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, #000000 0%, #242424 35%, #8c8c8c 100%);
+  background: linear-gradient(180deg, #000000 0%, #242424 65%, #8c8c8c 100%);
   z-index: 0;
 }
 
